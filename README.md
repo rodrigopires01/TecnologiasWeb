@@ -1,5 +1,5 @@
 
-a) Grupo 12: António Freitas|Daniela Gabriel|Rodrigo Pires
+a) Grupo 5: Daniela Gabriel|Newton Filipe|Rodrigo Pires
 
 b):
 Usado predominadamente branco e azul claro como cores de fundo para fazer contraste com as linhas separadores de conteúdo e o texto, e fazer destaque do logotipo e opções de menu no cabeçalho e separar visualmente  rodapé do resto da página.
