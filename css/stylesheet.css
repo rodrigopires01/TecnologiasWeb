@@ -13,7 +13,7 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 20px;
+    padding: 0px 30px;
     flex-wrap: wrap;
     position: sticky;
     top: 0;
@@ -24,7 +24,9 @@ header {
 }
 
 .logo img{
-    height: 80px;
+    height: 70px;
+    margin-bottom: -10px;
+    overflow: hidden;
 }
 
 .navbar {
@@ -40,15 +42,17 @@ header {
 
 /* MAIN */
 main {
-    margin-left: 60px;
-    margin-right: 60px;
-    margin-top: 60px;
+    margin: 50px 100px;
     font-family: 'Source Sans 3', sans-serif;
 }
 
 .banner img {
     width: 100%;
+    height: 600px;
     display: block;
+    overflow: hidden;
+    object-fit: cover;
+    object-position: top;
 }
 
 .texto {
@@ -64,13 +68,19 @@ main {
 }
 
 
+/* APRESENTAÇÃO */
+.apresentacao {
+    scroll-margin-top: 115px;
+}
+
+
 /* INVESTIGACAO */
 
 .investigacao {
     margin-top: 30px;
     margin-bottom: 30px;
     text-align: center;
-    scroll-margin-top: 165px;
+    scroll-margin-top: 115px;
 }
 
 section.investigacao h1{ 
@@ -98,7 +108,7 @@ section.investigacao h3{
     margin-top: 30px;
     margin-bottom: 30px;
     text-align: center;
-    scroll-margin-top: 165px;
+    scroll-margin-top: 115px;
 }
 section.parceiros h1{
     font-family: 'Poppins', sans-serif;
@@ -123,7 +133,7 @@ section.parceiros h1{
 .oportunidades {
     margin-top: 30px;
     margin-bottom: 30px;
-    scroll-margin-top: 165px;
+    scroll-margin-top: 115px;
 }
 
 .oportunidades h1 {
@@ -132,9 +142,6 @@ section.parceiros h1{
     color: #0f9d58;
 }
 
-.oportunidades p {
-    margin-top: 100px;
-}
 
 .oportunidades-container {
     display: grid;
@@ -145,15 +152,15 @@ section.parceiros h1{
 .oportunidades-img img {
     margin: 40px;
     margin-left: 100px;
-    width: 80%;
+    width: 60%;
     display: block;
     justify-content: center;
     align-items: center;
 }
 
 .oportunidades-content {
-    margin: 40px;
     margin-right: 100px;
+    margin-bottom: 60px;
 }
 
 /* TABELA */
@@ -176,7 +183,7 @@ th {
 .contactos {
     margin-top: 30px;
     margin-bottom: 100px;
-    scroll-margin-top: 165px;
+    scroll-margin-top: 115px;
 
 }
 
@@ -319,6 +326,15 @@ footer {
 
 /* TABLET */
 @media (max-width: 1024px) {
+    .banner img {
+        width: 100%;
+        height: 350px;
+        display: block;
+        overflow: hidden;
+        object-fit: cover;
+        object-position: top;
+    }
+
     .grid-investigacao {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -383,6 +399,18 @@ footer {
 
 /* TELEMOVEL */
 @media (max-width: 768px) {
+    main {
+        margin: 40px 40px;
+    }
+    .banner img {
+        width: 100%;
+        height: 300px;
+        display: block;
+        overflow: hidden;
+        object-fit: cover;
+        object-position: top;
+    }
+
     .grid-investigacao {
         grid-template-columns: 1fr;
     }
@@ -461,5 +489,19 @@ footer {
 
     .menu-toggle:checked ~ .navbar {
         display: flex;
+    }
+}
+
+@media (max-width: 375px) {
+    main {
+        margin: 40px;
+    }
+    .banner img {
+        width: 100%;
+        height: 200px;
+        display: block;
+        overflow: hidden;
+        object-fit: cover;
+        object-position: top;
     }
 }
