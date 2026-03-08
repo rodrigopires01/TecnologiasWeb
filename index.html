@@ -8,7 +8,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/stylesheet.css">
+  <script src="js/javascript.js"></script>
 </head>
+    
+<button id="toTop" class="to-top" aria-label="Voltar ao topo" hidden>
+  ↑
+</button>
+
 
 <body>
   <div class="container">
@@ -172,11 +178,11 @@
           <div class="contacto-form">
             <h4>Contate-nos:</h4>
             <form>
-              <input type="text" placeholder="Nome">
-              <input type="email" placeholder="Email">
-              <input type="text" placeholder="Assunto">
-              <textarea placeholder="Mensagem"></textarea>
-              <button type="submit">Enviar</button>
+              <input type="text" placeholder="Nome Completo" class="nome_contacto">
+              <input type="email" placeholder="Email"  class="email_contacto">
+              <input type="text" placeholder="Assunto"  class="assunto_contacto">
+              <textarea placeholder="Mensagem" class="mensagem_contacto"></textarea>
+              <button type="submit" class="enviar">Enviar</button>
             </form>
           </div>
         </div>
@@ -202,6 +208,8 @@
         <a href="https://www.google.com/" target="_blank"><p>Politica de Privacidade</p></a>
       </div>
     </footer>
+    <script src="js/javascript.js"></script>
+  <script src="js/hover.js"></script>
   </div>
 </body>
 </html>
