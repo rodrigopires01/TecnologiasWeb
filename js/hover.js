@@ -20,7 +20,7 @@ function initHoverParceiros() {
         'UAC': 'Universidade dos Açores',
         'HDES': 'Hospital do Divino Espírito Santo',
         'USISM': 'Unidade de Saúde da Ilha de São Miguel',
-        'INOVA': 'INOVA - Inovação Açores'
+        'INOVA': 'Instituto de Inovação Tecnológica dos Açores',
     };
 
     // Para cada parceiro, preparar o efeito
