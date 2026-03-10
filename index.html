@@ -4,12 +4,15 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>CACA</title>
+	<title>Centro Académico Clinico dos Açores</title>
+	<link rel="icon" type="images/png" href="media/icon.png">
+
 	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
 		rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="css/stylesheet.css">
 	<script src="js/javascript.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 
 <body>
@@ -68,7 +71,7 @@
 
 					<div class="carrossel-wrapper">
 						<div class="carrossel-slides">
-							<!-- Slide 1 -->
+							<!-- Noticia 1 -->
 							<div class="carrossel-item active">
 								<div class="grid-titulo-data">
 									<div class="grid-titulo">
@@ -185,6 +188,22 @@
 					</div>
 				</div>
 
+				<h3 style="text-align: center; padding-top: 50px;">Subscreva-se ao nosso newsletter!</h5>
+
+				<div class="newsletter">
+					<div class="logo-newsletter">
+						<div id="dna-container" style="width: 100%; height: 100%;"></div>
+					</div>
+					<div class="input-newsletter">
+						<form>
+							<input type="text" placeholder="Insira o seu e-mail aqui." class="email_newsletter">
+						</form>
+					</div>
+					<div class="botao-submit-newsletter">
+						<button type="submit" class="enviar_newsletter">Enviar</button>
+					</div>
+				</div>
+
 			</section>
 			<hr class="linebreak">
 
@@ -237,20 +256,11 @@
 					Açores:
 				</p>
 				<div class="grid-parceiros">
-					<div class="grid-box">
-						<a href="https://uac.pt/" target="_blank"><img src="media/UAc-2.png" alt="UAC"></a>
-					</div>
-					<div class="grid-box">
-						<a href="https://www.hdes.pt/" target="_blank"><img src="media/HDES-2.png" alt="HDES"></a>
-					</div>
-					<div class="grid-box">
-						<a href="https://usism.azores.gov.pt/wp/" target="_blank"><img src="media/USISM-2.png"
-								alt="USISM"></a>
-					</div>
-					<div class="grid-box">
-						<a href="https://www.inovacores.pt/" target="_blank"><img src="media/INOVA-2.png"
-								alt="INOVA"></a>
-					</div>
+					<a href="https://uac.pt/" target="_blank" class="grid-box"> <img src="media/UAc-2.png" alt="UAC"> </a>
+					<a href="https://www.hdes.pt/" target="_blank" class="grid-box"> <img src="media/HDES-2.png" alt="HDES"> </a>
+					<a href="https://usism.azores.gov.pt/wp/" target="_blank" class="grid-box"> <img src="media/USISM-2.png" alt="USISM"> </a>
+					<a href="https://www.inovacores.pt/" target="_blank" class="grid-box"> <img src="media/INOVA-2.png" alt="INOVA"> </a>
+
 				</div>
 			</section>
 
