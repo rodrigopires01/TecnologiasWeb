@@ -132,10 +132,12 @@ main {
 }
 
 .carrossel-btn.prev {
-    left: 0;
+    top: 280px;
+    left: 0px;
 }
 
 .carrossel-btn.next {
+    top: 280px;
     right: 0;
 }
 
@@ -226,6 +228,21 @@ main {
 
 
 /* NEWSLETTER */
+
+.newsletter-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+}
+
+.newsletter-logotipo3d {
+    width: 600px;
+    height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .newsletter {
     display: flex;
     align-items: center;
@@ -944,6 +961,10 @@ footer {
     th, td {
         padding: 6px;
     }
+
+    .carrossel-noticias {
+        padding: 0px;
+    }
     
     .oportunidades-content p {
         text-align: center;
@@ -959,12 +980,14 @@ footer {
     }
 
     .grid-box-texto{
-        margin-bottom: 500px;
+        margin-bottom: 250px;
     }
     
     .carrossel-indicadores {
         margin-top: 5px;
     }
+
+   
 }
 
 
