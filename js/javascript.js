@@ -22,7 +22,7 @@ function validarNewsletter() {
             emailInput.style.border = '1px solid #dc3545';
             emailInput.style.backgroundColor = '#fff8f8';
         } else if (!emailRegex.test(email)) {
-            mostrarToast('E-mail inválido, use @ e . e certifique-se que o email existe!', 'error');
+            mostrarToast('E-mail inválido!', 'error');
             emailInput.style.border = '1px solid #dc3545';
             emailInput.style.backgroundColor = '#fff8f8';
         } else {
