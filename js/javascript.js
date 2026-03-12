@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     validarNewsletter();
+    listaPaises();
     validarFormulario();
     botaoTopo();
     carrosselNoticias();
@@ -8,28 +9,64 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function validarNewsletter() {
-    const submitBtn = document.querySelector('.botao-submit-newsletter .enviar_newsletter');
+const submitBtn = document.querySelector('.newsletter-formulario .enviar_newsletter');
     const emailInput = document.querySelector('.email_newsletter');
+    const paisSelect = document.querySelector('.pais_selector');
 
     submitBtn.addEventListener('click', function (event) {
         event.preventDefault();
         
         const email = emailInput.value.trim();
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
+        
+        const selectedCountry = paisSelect.value;
+        
+        // Resetar estilos para ficar branco
+        emailInput.style.border = '1px solid #ddd';
+        emailInput.style.backgroundColor = 'white';
+        paisSelect.style.border = '1px solid #ddd';
+        paisSelect.style.backgroundColor = 'white';
+        
+        const errors = [];
+        
+        // Validar email
         if (email === '') {
-            mostrarToast('Por favor, insira um e-mail!', 'error');
+            errors.push('Por favor insira um e-mail!');
             emailInput.style.border = '1px solid #dc3545';
             emailInput.style.backgroundColor = '#fff8f8';
         } else if (!emailRegex.test(email)) {
-            mostrarToast('E-mail inválido!', 'error');
+            errors.push('E-mail inválido!');
             emailInput.style.border = '1px solid #dc3545';
             emailInput.style.backgroundColor = '#fff8f8';
+        }
+        
+        // Validar pais
+        if (selectedCountry === 'default' || selectedCountry === 'Selecione o seu pais.') {
+            errors.push('Por favor escolha um país!');
+            paisSelect.style.border = '1px solid #dc3545';
+            paisSelect.style.backgroundColor = '#fff8f8';
+        }
+        
+        // Mostrar erros
+        if (errors.length > 0) {
+            // Se for 1, mostra no toast apenas 1 erro
+            if (errors.length === 1) {
+                mostrarToast(errors[0], 'error');
+            } else {
+                // Se for mais q 1 erro, junta as mensagens de erros, com breakline a separa-las
+                const combinedMessage = errors.join('<br>');
+                mostrarToast(combinedMessage, 'error');
+            }
         } else {
+            // Se tiver tudo preenchido / correto, mostra toast de sucesso
             mostrarToast('Subscrito com sucesso!', 'success');
             emailInput.style.border = '1px solid #0f9d58';
             emailInput.style.backgroundColor = '#f8fff8';
+            paisSelect.style.border = '1px solid #0f9d58';
+            paisSelect.style.backgroundColor = '#f8fff8';
+            
             emailInput.value = '';
+            paisSelect.value = 'default';
         }
     });
 }
@@ -319,144 +356,135 @@ function initDNA3D() {
     const container = document.getElementById('dna-container');
     if (!container) return;
 
-    // Cores (iguais ao CodePen)
+    // Cores
     const blue = 0x84D0F0;
     const yellow = 0xFED162;
     const purple = 0x651E59;
 
-    // Scene
+    // Setup básico Three.js
     const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+    camera.position.z = 20;
 
-
-    // Camera
-    const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
-    camera.position.z = 15; // Aproximar um pouco para caber no círculo
-
-    // Renderer
-    const renderer = new THREE.WebGLRenderer({ 
-        antialias: true, 
-        alpha: true // <-- MUDAR para true
-    });
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(container.clientWidth, container.clientHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setClearColor(0x000000, 0); // Fundo completamente transparente
+    renderer.setClearColor(0x000000, 0);
     container.appendChild(renderer.domElement);
 
-    // Geometrias
-    const tubeGeometry = new THREE.CylinderGeometry(0.2, 0.2, 3.5, 16); // Mais pequeno
-    const ballGeometry = new THREE.SphereGeometry(0.5, 24, 24); // Mais pequeno
+    // Geometrias simplificadas
+    const tubeGeometry = new THREE.CylinderGeometry(0.3, 0.3, 6, 16);
+    const ballGeometry = new THREE.SphereGeometry(0.8, 16, 16);
 
+    // Materiais
     const blueMaterial = new THREE.MeshBasicMaterial({ color: blue });
     const yellowMaterial = new THREE.MeshBasicMaterial({ color: yellow });
+    const purpleMaterial = new THREE.MeshBasicMaterial({ color: purple });
 
-    // Grupo principal para rodar tudo
+    // Grupo principal
     const dnaGroup = new THREE.Group();
 
-    // Criar a estrutura do DNA (adaptado do CodePen)
-    const radius = 2.0; // Raio menor para caber no círculo
-    const turns = 2;    // Número de voltas
-    const segments = 24; // Número de pares de bases
-    const heightTotal = 5.0;
+    // Versão simplificada: apenas 20 camadas
+    for (let i = 0; i <= 20; i++) {
+        const row = new THREE.Group();
+        const yPos = i * 2 - 20; // Centraliza verticalmente
 
-    // Cores alternadas
-    const colors = [blueMaterial, yellowMaterial];
+        // Tubos laterais
+        const blueTube = new THREE.Mesh(tubeGeometry, blueMaterial);
+        blueTube.rotation.z = Math.PI/2;
+        blueTube.position.set(-3, 0, 0);
 
-    for (let i = 0; i <= segments; i++) {
-        const progress = i / segments; // 0 a 1
-        const angle = progress * Math.PI * 2 * turns;
-        const y = (progress - 0.5) * heightTotal;
+        const yellowTube = new THREE.Mesh(tubeGeometry, yellowMaterial);
+        yellowTube.rotation.z = Math.PI/2;
+        yellowTube.position.set(3, 0, 0);
 
-        // Posição das duas bolas (lados opostos)
-        const x1 = Math.cos(angle) * radius;
-        const z1 = Math.sin(angle) * radius;
-        const x2 = Math.cos(angle + Math.PI) * radius;
-        const z2 = Math.sin(angle + Math.PI) * radius;
+        // Esferas das pontas
+        const ballLeft = new THREE.Mesh(ballGeometry, purpleMaterial);
+        ballLeft.position.set(-6, 0, 0);
 
-        // Alternar material
-        const materialIndex = i % 2;
-        const material1 = colors[materialIndex];
-        const material2 = colors[(materialIndex + 1) % 2];
+        const ballRight = new THREE.Mesh(ballGeometry, purpleMaterial);
+        ballRight.position.set(6, 0, 0);
 
-        // Bola 1
-        const ball1 = new THREE.Mesh(ballGeometry, material1);
-        ball1.position.set(x1, y, z1);
-        dnaGroup.add(ball1);
+        // Monta a linha
+        row.add(blueTube, yellowTube, ballLeft, ballRight);
+        row.position.y = yPos;
+        row.rotation.y = i * 0.5; // Rotação progressiva
 
-        // Bola 2
-        const ball2 = new THREE.Mesh(ballGeometry, material2);
-        ball2.position.set(x2, y, z2);
-        dnaGroup.add(ball2);
-
-        // Conectar com um cilindro (apenas em alguns pontos para não ficar poluído)
-        if (i % 2 === 0) {
-            // Conexão horizontal entre as duas bolas
-            const midX = (x1 + x2) / 2;
-            const midY = y;
-            const midZ = (z1 + z2) / 2;
-
-            const direction = new THREE.Vector3(x2 - x1, 0, z2 - z1);
-            const length = direction.length();
-
-            if (length > 0) {
-                const cylinder = new THREE.Mesh(
-                    new THREE.CylinderGeometry(0.08, 0.08, length, 6),
-                    new THREE.MeshBasicMaterial({ color: 0xffffff })
-                );
-
-                // Posicionar e rodar o cilindro para conectar as bolas
-                cylinder.position.set(midX, y, midZ);
-                cylinder.quaternion.setFromUnitVectors(
-                    new THREE.Vector3(0, 1, 0),
-                    direction.clone().normalize()
-                );
-
-                dnaGroup.add(cylinder);
-            }
-        }
+        dnaGroup.add(row);
     }
-
-    // Adicionar coluna central (opcional, para dar mais estabilidade visual)
-    const centerColumn = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.05, 0.05, heightTotal + 1, 8),
-        new THREE.MeshBasicMaterial({ color: 0xffffff })
-    );
-    centerColumn.position.set(0, 0, 0);
-    dnaGroup.add(centerColumn);
 
     scene.add(dnaGroup);
 
-    // Animação
+    // Animação simples
     function animate() {
         requestAnimationFrame(animate);
-
-        // Rotação suave
-        dnaGroup.rotation.y += 0.005;
-        dnaGroup.rotation.x += 0.001;
-
+        dnaGroup.rotation.x += 0.005;
+        dnaGroup.rotation.y += 0.01;
         renderer.render(scene, camera);
     }
-
     animate();
 
-    // Ajustar ao redimensionamento da janela
-    window.addEventListener('resize', onWindowResize, false);
-
-    function onWindowResize() {
+    // Redimensionamento
+    window.addEventListener('resize', () => {
         const width = container.clientWidth;
         const height = container.clientHeight;
-
-        renderer.setSize(width, height);
         camera.aspect = width / height;
         camera.updateProjectionMatrix();
-    }
-
-    // Observer para quando o container muda de tamanho (ex: mobile)
-    const resizeObserver = new ResizeObserver(() => {
-        const width = container.clientWidth;
-        const height = container.clientHeight;
         renderer.setSize(width, height);
-        camera.aspect = width / height;
-        camera.updateProjectionMatrix();
     });
-    resizeObserver.observe(container);
 }
+
+function listaPaises() {
+
+    const countries = [
+        "Afghanistan", "Åland Islands", "Albania", "Algeria", "American Samoa", "Andorra", "Angola",
+        "Anguilla", "Antarctica", "Antigua and Barbuda", "Argentina", "Armenia", "Aruba", "Australia",
+        "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium",
+        "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia (Plurinational State of)", "Bonaire, Sint Eustatius and Saba",
+        "Bosnia and Herzegovina", "Botswana", "Bouvet Island", "Brazil", "British Indian Ocean Territory",
+        "Brunei Darussalam", "Bulgaria", "Burkina Faso", "Burundi", "Cabo Verde", "Cambodia", "Cameroon",
+        "Canada", "Cayman Islands", "Central African Republic", "Chad", "Chile", "China", "Christmas Island",
+        "Cocos (Keeling) Islands", "Colombia", "Comoros", "Congo", "Congo (Democratic Republic of the)",
+        "Cook Islands", "Costa Rica", "Côte d'Ivoire", "Croatia", "Cuba", "Curaçao", "Cyprus", "Czechia",
+        "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador",
+        "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini", "Ethiopia", "Falkland Islands (Malvinas)",
+        "Faroe Islands", "Fiji", "Finland", "France", "French Guiana", "French Polynesia",
+        "French Southern Territories", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Gibraltar",
+        "Greece", "Greenland", "Grenada", "Guadeloupe", "Guam", "Guatemala", "Guernsey", "Guinea",
+        "Guinea-Bissau", "Guyana", "Haiti", "Heard Island and McDonald Islands", "Holy See", "Honduras",
+        "Hong Kong", "Hungary", "Iceland", "India", "Indonesia", "Iran (Islamic Republic of)", "Iraq",
+        "Ireland", "Isle of Man", "Israel", "Italy", "Jamaica", "Japan", "Jersey", "Jordan", "Kazakhstan",
+        "Kenya", "Kiribati", "Korea (Democratic People's Republic of)", "Korea (Republic of)", "Kuwait",
+        "Kyrgyzstan", "Lao People's Democratic Republic", "Latvia", "Lebanon", "Lesotho", "Liberia",
+        "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Macao", "Madagascar", "Malawi", "Malaysia",
+        "Maldives", "Mali", "Malta", "Marshall Islands", "Martinique", "Mauritania", "Mauritius",
+        "Mayotte", "Mexico", "Micronesia (Federated States of)", "Moldova (Republic of)", "Monaco",
+        "Mongolia", "Montenegro", "Montserrat", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru",
+        "Nepal", "Netherlands", "New Caledonia", "New Zealand", "Nicaragua", "Niger", "Nigeria",
+        "Niue", "Norfolk Island", "North Macedonia", "Northern Mariana Islands", "Norway", "Oman",
+        "Pakistan", "Palau", "Palestine, State of", "Panama", "Papua New Guinea", "Paraguay", "Peru",
+        "Philippines", "Pitcairn", "Poland", "Portugal", "Puerto Rico", "Qatar", "Réunion", "Romania",
+        "Russian Federation", "Rwanda", "Saint Barthélemy", "Saint Helena, Ascension and Tristan da Cunha",
+        "Saint Kitts and Nevis", "Saint Lucia", "Saint Martin (French part)", "Saint Pierre and Miquelon",
+        "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia",
+        "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Sint Maarten (Dutch part)",
+        "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa",
+        "South Georgia and the South Sandwich Islands", "South Sudan", "Spain", "Sri Lanka", "Sudan",
+        "Suriname", "Svalbard and Jan Mayen", "Sweden", "Switzerland", "Syrian Arab Republic",
+        "Taiwan (Province of China)", "Tajikistan", "Tanzania, United Republic of", "Thailand",
+        "Timor-Leste", "Togo", "Tokelau", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey",
+        "Turkmenistan", "Turks and Caicos Islands", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates",
+        "United Kingdom of Great Britain and Northern Ireland", "United States of America",
+        "United States Minor Outlying Islands", "Uruguay", "Uzbekistan", "Vanuatu",
+        "Venezuela (Bolivarian Republic of)", "Viet Nam", "Virgin Islands (British)",
+        "Virgin Islands (U.S.)", "Wallis and Futuna", "Western Sahara", "Yemen", "Zambia", "Zimbabwe"
+    ];
+
+    const paisSelect = document.getElementById('pais');
+
+    countries.forEach(country => {
+        const option = document.createElement('option');
+        option.value = country;
+        option.textContent = country;
+        paisSelect.appendChild(option);
+    });
+};
