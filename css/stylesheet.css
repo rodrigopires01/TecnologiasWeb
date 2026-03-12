@@ -806,7 +806,7 @@ footer {
         margin: 0 auto;
         width: 90%;
         max-width: 800px;
-
+        overflow-x: auto;
     }
 
     table {
@@ -908,7 +908,7 @@ footer {
     .oportunidades-content {
         margin: 0;
         width: 100%;
-
+        overflow-x: auto;
     }
 
     .newsletter-logotipo3d {
