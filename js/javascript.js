@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
+    fecharMenuHamburger();
     validarNewsletter();
     listaPaises();
     validarFormulario();
@@ -9,6 +10,18 @@ document.addEventListener('DOMContentLoaded', function () {
     criarGraficoProducao();
     expandirInvestigacao(); 
 });
+
+function fecharMenuHamburger() {
+    const menuToggle = document.getElementById('menu-toggle');
+    const navLinks = document.querySelectorAll('.navbar a');
+    
+    navLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            menuToggle.checked = false;
+        });
+    });
+}
+
 
 function validarNewsletter() {
 const submitBtn = document.querySelector('.newsletter-formulario .enviar_newsletter');
@@ -234,17 +247,16 @@ function carrosselNoticias() {
 
     // Event listener para setas do teclado (acessibilidade)
     document.addEventListener('keydown', function(e) {
-        // Verificar se a secção de notícias está visível na tela
-        const noticiasSection = document.querySelector('.noticias');
+
+        // Verificar se o div do carrossel está visível no ecrã
+        const noticiasSection = document.querySelector('.carrossel-noticias');
         const rect = noticiasSection.getBoundingClientRect();
         const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
         
         if (isVisible) {
             if (e.key === 'ArrowLeft') {
-                e.preventDefault(); // Prevenir scroll da página
                 showSlide(slideAtual - 1);
             } else if (e.key === 'ArrowRight') {
-                e.preventDefault(); // Prevenir scroll da página
                 showSlide(slideAtual + 1);
             }
         }
@@ -628,9 +640,9 @@ function expandirInvestigacao() {
 
         // Texto adicional para cada área
         const textosExtras = [
-            'A investigação em epidemiologia nos Açores tem permitido identificar padrões genéticos únicos na população açoriana, contribuindo para o desenvolvimento de estratégias preventivas mais eficazes e personalizadas para doenças como a Machado-Joseph.',
-            'Os projetos de telemedicina desenvolvidos no arquipélago têm demonstrado resultados promissores na redução do tempo de espera para consultas especializadas, especialmente nas ilhas com menor densidade populacional e recursos de saúde mais limitados.',
-            'Estudos recentes indicam que programas regulares de exercício físico supervisionado podem reduzir em até 30% os sintomas de ansiedade e depressão na população açoriana, representando uma intervenção não farmacológica de baixo custo e alto impacto.'
+            'A investigação nesta área procura identificar padrões de doença, fatores de risco e tendências de saúde na população açoriana. A análise de dados clínicos e demográficos permite apoiar políticas públicas, orientar programas de prevenção e melhorar a resposta dos serviços de saúde às necessidades da população. A colaboração entre investigadores, profissionais de saúde e instituições académicas permite desenvolver estudos populacionais, bases de dados regionais e metodologias de análise estatística aplicadas à saúde pública. Esta abordagem contribui para uma melhor compreensão das particularidades epidemiológicas de regiões insulares. A área de epidemiologia do CACA integra uma equipa multidisciplinar de investigadores e estudantes de pós-graduação. Atualmente estão em desenvolvimento vários projetos de investigação e estudos populacionais, que já resultaram em diversas publicações científicas e dissertações de mestrado e doutoramento dedicadas à saúde pública e às doenças genéticas na região.',
+            'A investigação nesta área foca-se no desenvolvimento e avaliação de tecnologias digitais que permitam melhorar o acesso aos cuidados de saúde, especialmente em regiões geograficamente dispersas. As soluções incluem sistemas de teleconsulta, monitorização remota de pacientes e plataformas de apoio à decisão clínica. A aplicação de tecnologias digitais na saúde permite reduzir tempos de resposta, otimizar recursos médicos e facilitar a comunicação entre diferentes unidades de saúde. Em contextos insulares, estas ferramentas têm um papel particularmente relevante na melhoria da continuidade dos cuidados. A área de telemedicina do CACA envolve investigadores das áreas da saúde, informática e engenharia, desenvolvendo projetos de inovação tecnológica em colaboração com unidades de saúde regionais. Estes projetos já deram origem a várias publicações científicas, protótipos de plataformas digitais e trabalhos académicos de mestrado e doutoramento.',
+            'A investigação nesta área procura compreender os fatores biológicos, psicológicos e sociais que influenciam o bem-estar mental da população. Estudos desenvolvidos no CACA analisam o impacto de estilos de vida, atividade física e contextos sociais na saúde mental. Um dos focos principais é a promoção de estratégias de prevenção e intervenção que possam melhorar a qualidade de vida das populações. Programas comunitários de exercício físico, educação para a saúde e promoção de hábitos saudáveis têm sido estudados como formas de reduzir fatores de risco associados à ansiedade, depressão e outros problemas de saúde mental. A equipa de investigação em saúde mental reúne investigadores, profissionais de saúde e estudantes de pós-graduação que desenvolvem projetos interdisciplinares na área da promoção da saúde. Estes trabalhos têm contribuído para a produção de artigos científicos, dissertações académicas e projetos aplicados em colaboração com instituições regionais.'
         ];
         
         // Criar elemento para o texto extra
@@ -644,7 +656,7 @@ function expandirInvestigacao() {
         link.insertAdjacentElement('afterend', textoExtra);
         
         // Evento de click
-        link.addEventListener('click', function(e) {
+        link.addEventListener('click', function() {
             // Alternar visibilidade
             if (textoExtra.style.display === 'none') {
                 textoExtra.style.display = 'block';
