@@ -323,6 +323,13 @@ main {
     text-align: justify;
 }
 
+.grid-box-investigacao a {
+    cursor: pointer;
+    color: #1a73e8;
+    font-weight: 600;
+    text-decoration: none;
+}
+
 /* PARCEIROS */
 .parceiros {
     margin-top: 30px;
@@ -1020,3 +1027,4 @@ footer {
         visibility: hidden;
     }
 }
+
