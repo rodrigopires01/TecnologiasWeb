@@ -13,13 +13,14 @@
 	<link rel="stylesheet" href="css/stylesheet.css">
 	<script src="js/javascript.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+	<script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 
 <body>
 	<div class="container">
 		<header>
 			<div class="logo">
-				<img src="media/logo.png" alt="logo">
+				<a href="#apresentacao"><img src="media/logo.png" alt="logo"></a>
 			</div>
 
 			<input type="checkbox" id="menu-toggle" class="menu-toggle">
@@ -32,7 +33,7 @@
 
 			<nav class="navbar">
 				<a href="#apresentacao">Apresentação</a>
-				<a href="#noticias">Noticias</a>
+				<a href="#noticias">Notícias</a>
 				<a href="#investigacao">Investigação</a>
 				<a href="#parceiros">Parceiros</a>
 				<a href="#oportunidades">Oportunidades</a>
@@ -54,10 +55,7 @@
 					</p>
 
 					<p>
-						O objetivo é que a investigação científica seja aprofundada para que se conheça
-						a realidade regional e os problemas diversos ao nível da saúde, como também
-						para apoiar a decisão política na área da saúde, contribuindo para a capacitação
-						da área clínica.
+						O objetivo é aprofundar a investigação científica para que se conheça a realidade regional e os problemas diversos ao nível da saúde, como também apoiar a decisão política na área da saúde, contribuindo para a capacitação da área clínica.
 					</p>
 				</div>
 			</section>
@@ -120,19 +118,19 @@
 									</div>
 									<div class="grid-box-texto">
 										<p>
-											Profissionais da área da saúde participaram recentemente numa ação de
-											formação dedicada à melhoria do funcionamento da Linha de Saúde Açores, com
+											Profissionais da área da saúde participaram recentemente numa <strong>ação de
+											formação dedicada à melhoria do funcionamento da Linha de Saúde Açores</strong>, com
 											o objetivo de reforçar a qualidade do atendimento, otimizar os processos de
 											triagem e garantir uma resposta mais eficaz às necessidades da população.<br><br>
 											A iniciativa reuniu médicos, enfermeiros e técnicos de atendimento,
 											abordando temas como comunicação clínica à distância, utilização de
 											protocolos de triagem e gestão segura da informação clínica. Durante a
-											sessão foram também apresentados exemplos de boas práticas no acompanhamento
-											remoto de utentes, com especial foco na orientação adequada para os
+											sessão foram também apresentados exemplos de <strong>boas práticas no acompanhamento
+											remoto de utentes</strong>, com especial foco na orientação adequada para os
 											diferentes serviços de saúde da região.<br><br>
 											O evento contou ainda com a colaboração de investigadores associados ao
-											Centro Académico Clínico dos Açores (CACA), que apresentaram o trabalho
-											desenvolvido na área da telemedicina. Esta investigação procura melhorar a
+											Centro Académico Clínico dos Açores (CACA), que apresentaram o <strong>trabalho
+											desenvolvido na área da telemedicina.</strong> Esta investigação procura melhorar a
 											integração de plataformas digitais no sistema regional de saúde, facilitando
 											o encaminhamento de utentes entre unidades de saúde e promovendo uma
 											resposta mais rápida e coordenada entre as diferentes ilhas do arquipélago.
@@ -158,7 +156,7 @@
 									</div>
 									<div class="grid-box-texto">
 										<p>
-											Um investigador associado ao Centro Académico Clínico dos Açores (CACA)
+											A investigadora Joana Cabral, associada ao Centro Académico Clínico dos Açores (CACA),
 											participou recentemente num congresso internacional dedicado às doenças
 											neurológicas raras, onde apresentou <strong>novos dados sobre a epidemiologia da
 											Doença de Machado-Joseph no arquipélago.</strong><br><br>
@@ -193,7 +191,7 @@
 					<div id="dna-container" style="width: 100%; height: 100%; "></div>
 				</div>
 				<div class="newsletter-formulario">
-					<h3 style="text-align: center; margin-bottom: 50px;">Subscreva a nossa newsletter!</h5>
+					<h3 style="text-align: center; margin-bottom: 50px;">Subscreva a nossa newsletter!</h3>
 					<form>
 						<input type="email" placeholder="Insira o seu e-mail aqui" class="email_newsletter" aria-label="Insira o seu e-mail">
 						<select id="pais" aria-label="Seleciona o pais" class="pais_selector">
@@ -218,8 +216,10 @@
 							populações, sendo essencial para a tomada de decisões em saúde pública. Nos Açores, a doença
 							Machado-Joseph é estudada epidemiologicamente, permitindo compreender sua prevalência, risco
 							e impacto na
-							comunidade. <a href="https://www.google.com/" target="_blank">Saiba mais</a></p>
-						<p><strong>Professor Responsável: </strong>Maria Silva</p>
+							comunidade. <a class="saiba-mais">Saiba mais</a></p>
+						<p><strong>Professor Responsável: </strong>Maria Silva<br>
+							<strong>Contacto:</strong> <a href="mailto:maria.silva@uac.pt">maria.silva@uac.pt</a>
+						</p>
 					</div>
 					<div class="grid-box-investigacao">
 						<h3>Telemedicina</h3>
@@ -229,9 +229,10 @@
 							acesso rápido a
 							histórico clínico. Nos Açores, a telemedicina pode permitir encaminhamentos rápidos entre
 							ilhas, gerindo
-							os diferentes recursos e incluindo a transferência segura de informações clínicas. <a
-								href="https://www.google.com/" target="_blank">Saiba mais</a></p>
-						<p><strong>Professor Responsável: </strong>Ana Campos</p>
+							os diferentes recursos e incluindo a transferência segura de informações clínicas. <a class="saiba-mais">Saiba mais</a></p>
+						<p><strong>Professor Responsável: </strong>Ana Campos<br>
+							<strong>Contacto:</strong> <a href="mailto:ana.campos@uac.pt">ana.campos@uac.pt</a>
+						</p>
 					</div>
 					<div class="grid-box-investigacao">
 						<h3>Saúde Mental</h3>
@@ -241,17 +242,22 @@
 							e tomar
 							decisões. Sendo os Açores a região do país com maior taxa de obesidade e suicídios, a
 							promoção estruturada
-							do exercício físico pode contribuir simultaneamente para a saúde física e mental. <a
-								href="https://www.google.com/" target="_blank">Saiba mais</a></p>
-						<p><strong>Professor Responsável: </strong>José Rocha</p>
+							do exercício físico pode contribuir simultaneamente para a saúde física e mental. <a class="saiba-mais">Saiba mais</a></p>
+						<p><strong>Professor Responsável: </strong>José Rocha<br>
+							<strong>Contacto:</strong> <a href="mailto:jose.rocha@uac.pt">jose.rocha@uac.pt</a>
+						</p>
 					</div>
 				</div>
+				<div class="grafico-container">
+						<h3 style="text-align: center; padding-top: 30px;">Produção Acadêmica e Científica</h3>
+						<div id="grafico-producao" style="width: 100%; height: 400px; margin: 20px 0;"></div>
+					</div>
 			</section>
 
 			<hr class="linebreak">
 
 			<section id="parceiros" class="parceiros" tabindex="0">
-				<h1>Parceiros</h1>
+				<h1>Instituições Parceiras</h1>
 				<p>Instituições de ensino, investigação e saúde que colaboram no âmbito do Centro Académico Clínico dos
 					Açores:
 				</p>
