@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', function () {
     carrosselNoticias();
     hoverParceiros();
     initDNA3D();
+    criarGraficoProducao();
+    expandirInvestigacao(); 
 });
 
 function validarNewsletter() {
@@ -488,3 +490,169 @@ function listaPaises() {
         paisSelect.appendChild(option);
     });
 };
+
+
+// ==================== GRÁFICO DE PRODUÇÃO ACADÊMICA ====================
+function criarGraficoProducao() {
+    // Dados para o gráfico
+    const data = [
+        {categoria: "Projetos", tipo: "Em curso", valor: 3},
+        {categoria: "Projetos", tipo: "Concluídos", valor: 6},
+        {categoria: "Estágios", tipo: "Em curso", valor: 8},
+        {categoria: "Estágios", tipo: "Concluídos", valor: 14},
+        {categoria: "Mestrados/Doutoramentos", tipo: "Em curso", valor: 4},
+        {categoria: "Mestrados/Doutoramentos", tipo: "Concluídos", valor: 9},
+        {categoria: "Publicações", tipo: "Indexadas", valor: 16},
+        {categoria: "Publicações", tipo: "Não indexadas", valor: 5}
+    ];
+
+    // Configurações do gráfico
+    const width = 1550;
+    const marginTop = 30;
+    const marginRight = 150;
+    const marginBottom = 30;
+    const marginLeft = 180;
+
+    // Identificar tipos únicos
+    const tipos = Array.from(new Set(data.map(d => d.tipo)));
+
+    // Agrupar dados por categoria
+    const dadosAgrupados = Array.from(d3.group(data, d => d.categoria), ([categoria, valores]) => {
+        const obj = {categoria};
+        valores.forEach(v => obj[v.tipo] = v.valor);
+        return obj;
+    });
+
+    // Criar o stack
+    const series = d3.stack().keys(tipos)(dadosAgrupados);
+
+    // Calcular altura
+    const height = series[0].length * 60 + marginTop + marginBottom;
+
+    // Escalas
+    const x = d3.scaleLinear()
+        .domain([0, d3.max(series, d => d3.max(d, d => d[1]))])
+        .range([marginLeft, width - marginRight]);
+
+    const y = d3.scaleBand()
+        .domain(dadosAgrupados.map(d => d.categoria))
+        .range([marginTop, height - marginBottom])
+        .padding(0.2);
+
+    const color = d3.scaleOrdinal()
+        .domain(tipos)
+        .range(["#1E88E5", "#FFC107", "#4CAF50", "#F44336"]);
+
+    // Criar SVG
+    const svg = d3.select("#grafico-producao")
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .attr("viewBox", [0, 0, width, height])
+        .attr("style", "max-width: 100%; height: auto;");
+
+    // Adicionar barras
+    svg.append("g")
+        .selectAll()
+        .data(series)
+        .join("g")
+        .attr("fill", d => color(d.key))
+        .selectAll("rect")
+        .data(D => D.map(d => (d.key = D.key, d)))
+        .join("rect")
+        .attr("x", d => x(d[0]))
+        .attr("y", d => y(d.data.categoria))
+        .attr("height", y.bandwidth())
+        .attr("width", d => x(d[1]) - x(d[0]))
+        .append("title")
+        .text(d => `${d.data.categoria} - ${d.key}: ${d.data[d.key]}`);
+
+    // Valores numéricos nas barras (alinhados à direita)
+    svg.append("g")
+        .selectAll()
+        .data(series)
+        .join("g")
+        .selectAll("text")
+        .data(D => D.map(d => (d.key = D.key, d)))
+        .join("text")
+        .attr("x", d => x(d[1]) - 5)
+        .attr("y", d => y(d.data.categoria) + y.bandwidth() / 2 + 5)
+        .attr("text-anchor", "end")
+        .attr("fill", "white")
+        .attr("font-size", "14px")
+        .attr("font-weight", "bold")
+        .text(d => d.data[d.key] || "");
+
+    // Eixos (com array para aplicar configurações em ambos os eixos)
+    [
+        {axis: d3.axisTop(x).ticks(8), transform: `translate(0,${marginTop})`, classe: "eixo-x"},
+        {axis: d3.axisLeft(y).tickSizeOuter(0), transform: `translate(${marginLeft},0)`, classe: "eixo-y"}
+    ].forEach(e => {
+        svg.append("g")
+            .attr("transform", e.transform)
+            .call(e.axis)
+            .call(g => g.selectAll(".domain").remove())
+            .call(g => g.selectAll(".tick text")
+                .attr("font-size", "14px")
+                .attr("font-weight", "500"));
+    });
+
+    // Legenda
+    const legend = svg.append("g")
+        .attr("transform", `translate(${width - marginRight + 20}, ${marginTop})`);
+
+    tipos.forEach((tipo, i) => {
+        const legendRow = legend.append("g")
+            .attr("transform", `translate(0, ${i * 25})`);
+
+        legendRow.append("rect")
+            .attr("width", 18)
+            .attr("height", 18)
+            .attr("fill", color(tipo));
+
+        legendRow.append("text")
+            .attr("x", 25)
+            .attr("y", 14)
+            .attr("text-anchor", "start")
+            .style("font-size", "14px")
+            .text(tipo);
+    });
+}
+
+function expandirInvestigacao() {
+    // Vai buscar todos os elementos que contem
+    const saibaMaisLinks = document.querySelectorAll('.grid-box-investigacao a.saiba-mais');
+    
+    // Para cada elemento
+    saibaMaisLinks.forEach((link, index) => {
+
+        // Texto adicional para cada área
+        const textosExtras = [
+            'A investigação em epidemiologia nos Açores tem permitido identificar padrões genéticos únicos na população açoriana, contribuindo para o desenvolvimento de estratégias preventivas mais eficazes e personalizadas para doenças como a Machado-Joseph.',
+            'Os projetos de telemedicina desenvolvidos no arquipélago têm demonstrado resultados promissores na redução do tempo de espera para consultas especializadas, especialmente nas ilhas com menor densidade populacional e recursos de saúde mais limitados.',
+            'Estudos recentes indicam que programas regulares de exercício físico supervisionado podem reduzir em até 30% os sintomas de ansiedade e depressão na população açoriana, representando uma intervenção não farmacológica de baixo custo e alto impacto.'
+        ];
+        
+        // Criar elemento para o texto extra
+        const textoExtra = document.createElement('div');
+        textoExtra.className = 'texto-extra';
+        textoExtra.style.display = 'none';
+        textoExtra.style.marginTop = '15px';
+        textoExtra.textContent = textosExtras[index];
+        
+        // Inserir após o saiba mais
+        link.insertAdjacentElement('afterend', textoExtra);
+        
+        // Evento de click
+        link.addEventListener('click', function(e) {
+            // Alternar visibilidade
+            if (textoExtra.style.display === 'none') {
+                textoExtra.style.display = 'block';
+                this.textContent = 'Mostrar menos';
+            } else {
+                textoExtra.style.display = 'none';
+                this.textContent = 'Saiba mais';
+            }
+        });
+    });
+}
