@@ -45,7 +45,5 @@ Como testar
 6. Scroll para ver botão "voltar ao topo" após 300px
 7. Clicar em "Saiba mais" nas áreas de investigação para ver texto expandido
 8. Verificar gráfico D3.js com dados da produção académica
-
 9. Testar responsividade reduzindo a largura do ecrã
-
 10. Clicar no menu hamburger em mobile e verificar que fecha após clique
