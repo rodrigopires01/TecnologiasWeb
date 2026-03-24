@@ -37,13 +37,16 @@ Tecnologias
 - D3.js (visualização de dados)
 - Google Fonts (Poppins e Source Sans 3)
 Como testar
-1. Abrir index.html no browser
-2. Navegar pelas secções via menu
-3. Testar formulários (email inválido, campos vazios)
-4. Usar setas do teclado ou swipe no carrossel
-5. Passar rato ou dar focus nos parceiros para ver efeito 3D
-6. Scroll para ver botão "voltar ao topo" após 300px
-7. Clicar em "Saiba mais" nas áreas de investigação para ver texto expandido
-8. Verificar gráfico D3.js com dados da produção académica
-9. Testar responsividade reduzindo a largura do ecrã
-10. Clicar no menu hamburger em mobile e verificar que fecha após clique
+1. Abrir um terminal/cmd no diretório onde se encontra o index.html
+2. Escrever: "python3 -m http.server" (É preciso ter o python instalado no computador)
+3. Abrir o browser e aceder a "http://localhost:8000/"
+4. (Os Passos 1,2 e 3 são necessários, porque ao usar os modulos em javascript, ocorre uma quebra de segurança do CORS e ao abrir apenas o index.html , o javascript não funcionará.)
+5. Navegar pelas secções via menu
+6. Testar formulários (email inválido, campos vazios)
+7. Usar setas do teclado ou swipe no carrossel
+8. Passar rato ou dar focus nos parceiros para ver efeito 3D
+9. Scroll para ver botão "voltar ao topo" após 300px
+10. Clicar em "Saiba mais" nas áreas de investigação para ver texto expandido
+11. Verificar gráfico D3.js com dados da produção académica
+12. Testar responsividade reduzindo a largura do ecrã
+13. Clicar no menu hamburger em mobile e verificar que fecha após clique
