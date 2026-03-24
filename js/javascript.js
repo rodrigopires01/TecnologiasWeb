@@ -1,197 +1,198 @@
+import { validarDadosNewsletter, validarDadosContacto } from '/js/validacoes.js';
+import { processarDadosGrafico, definirDimensoesEEscalas, criarSVG } from '/js/graficoD3.js'
+import { setupDNA3D, criarEstruturaDNA, iniciarAnimacaoDNA, configurarRedimensionamentoDNA } from '/js/dna.js'
+
+/**
+ * Primeiro event listener do site
+ * Aguarda o carregamento total do DOM para executar as funções de setup do site.
+ */
 document.addEventListener('DOMContentLoaded', function () {
     fecharMenuHamburger();
     validarNewsletter();
     listaPaises();
     validarFormulario();
+    configurarLimpezaAutomaticaErros();
     botaoTopo();
     carrosselNoticias();
     hoverParceiros();
     initDNA3D();
     criarGraficoProducao();
-    expandirInvestigacao(); 
+    expandirInvestigacao();
+    popularIndicativosTelefone();
+    configurarMensagensPredefinidas();
 });
 
+
+/**
+ * Fecha o menu hambúrguer quando uma link da navbar é clicado.
+ * @param {None} - Esta função não recebe parâmetros.
+ * @returns {void} - Esta função não retorna qualquer valor.
+ */
 function fecharMenuHamburger() {
-    const menuToggle = document.getElementById('menu-toggle');
-    const navLinks = document.querySelectorAll('.navbar a');
-    
-    navLinks.forEach(link => {
-        link.addEventListener('click', function() {
-            menuToggle.checked = false;
+    document.querySelectorAll('.navbar a').forEach(link => {
+        link.addEventListener('click', function () {
+            document.getElementById('menu-toggle').checked = false;
         });
     });
 }
 
 
+/**
+ * Faz a validação dos dados na secção do newsletter. Valida se o pais está selecionado e se o e-mail está num formato correto.
+ * @param {None} - Esta função não recebe parâmetros.
+ * @returns {void} - Esta função não retorna qualquer valor.
+ */
 function validarNewsletter() {
-const submitBtn = document.querySelector('.newsletter-formulario .enviar_newsletter');
+    const submitBtn = document.querySelector('.newsletter-formulario .enviar_newsletter');
     const emailInput = document.querySelector('.email_newsletter');
     const paisSelect = document.querySelector('.pais_selector');
 
     submitBtn.addEventListener('click', function (event) {
         event.preventDefault();
-        
-        const email = emailInput.value.trim();
-        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        
-        const selectedCountry = paisSelect.value;
-        
-        // Resetar estilos para ficar branco
+
+        const resultado = validarDadosNewsletter(emailInput.value, paisSelect.value);
+
         emailInput.style.border = '1px solid #ddd';
         emailInput.style.backgroundColor = 'white';
         paisSelect.style.border = '1px solid #ddd';
         paisSelect.style.backgroundColor = 'white';
-        
-        const errors = [];
-        
-        // Validar email
-        if (email === '') {
-            errors.push('Por favor insira um e-mail!');
+
+        if (resultado.erros.includes("E-mail inválido!") || resultado.erros.includes("Por favor insira um e-mail!")) {
             emailInput.style.border = '1px solid #dc3545';
-            emailInput.style.backgroundColor = '#fff8f8';
-        } else if (!emailRegex.test(email)) {
-            errors.push('E-mail inválido!');
-            emailInput.style.border = '1px solid #dc3545';
-            emailInput.style.backgroundColor = '#fff8f8';
         }
-        
-        // Validar pais
-        if (selectedCountry === 'default' || selectedCountry === 'Selecione o seu pais.') {
-            errors.push('Por favor escolha um país!');
+
+        if (resultado.erros.includes("Por favor escolha um país!")) {
             paisSelect.style.border = '1px solid #dc3545';
-            paisSelect.style.backgroundColor = '#fff8f8';
         }
-        
-        // Mostrar erros
-        if (errors.length > 0) {
-            // Se for 1, mostra no toast apenas 1 erro
-            if (errors.length === 1) {
-                mostrarToast(errors[0], 'error');
-            } else {
-                // Se for mais q 1 erro, junta as mensagens de erros, com breakline a separa-las
-                const combinedMessage = errors.join('<br>');
-                mostrarToast(combinedMessage, 'error');
-            }
+
+        if (!resultado.valido) {
+            const mensagem = resultado.erros.join('<br>');
+            mostrarToast(mensagem, 'error');
+
         } else {
-            // Se tiver tudo preenchido / correto, mostra toast de sucesso
             mostrarToast('Subscrito com sucesso!', 'success');
             emailInput.style.border = '1px solid #0f9d58';
             emailInput.style.backgroundColor = '#f8fff8';
             paisSelect.style.border = '1px solid #0f9d58';
             paisSelect.style.backgroundColor = '#f8fff8';
-            
             emailInput.value = '';
             paisSelect.value = 'default';
         }
     });
 }
 
-// Função que cria um toast
-function mostrarToast(mensagem, tipo) {
-    // Remover toasts existentes
-    const toastsExistentes = document.querySelectorAll('.toast');
-    toastsExistentes.forEach(toast => toast.remove());
 
-    // Criar novo toast
+/**
+ * Faz a validação dos dados na secção do newsletter. Valida se o pais está selecionado e se o e-mail está num formato correto.
+ * @param {string} mensagem - O texto que vai aparecer no toast.
+ * @param {string} tipo - Classe do CSS, error ou success.
+ * @returns {void} - Esta função não retorna qualquer valor.
+ */
+function mostrarToast(mensagem, tipo) {
+    document.querySelectorAll('.toast').forEach(toast => toast.remove());
+
     const toast = document.createElement('div');
 
     toast.className = `toast ${tipo}`;
     toast.innerHTML = `<span>${mensagem}</span>`;
-    
+
     document.body.appendChild(toast);
 }
 
-// Função para validar dados do formulario dos contactos
+
+/**
+ * Faz a validação dos dados na secção dos contactos. Valida se os campos não estão vazios, e valida se o e-mail está num formato correto.
+ * @param {None} - Esta função não recebe parâmetros.
+ * @returns {void} - Esta função não retorna qualquer valor.
+ */
 function validarFormulario() {
     const form = document.querySelector('.contacto-form form');
 
     form.addEventListener('submit', function (event) {
         event.preventDefault();
-        // Limpar mensagens de erro anteriores 
-        limparErros();
 
-        // Pegar os valores dos campos pelas classes 
-        const nome = document.querySelector('.nome_contacto').value.trim();
-        const email = document.querySelector('.email_contacto').value.trim();
-        const assunto = document.querySelector('.assunto_contacto').value.trim();
-        const mensagem = document.querySelector('.mensagem_contacto').value.trim();
+        const dados = {
+            nome: document.getElementById('nome_contacto').value.trim(),
+            email: document.getElementById('email_contacto').value.trim(),
+            telemovel: document.getElementById('telemovel_contacto').value.trim(),
+            assunto: document.getElementById('assunto_contacto').value.trim(),
+            mensagem: document.getElementById('mensagem_contacto').value.trim()
+        };
 
-        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        const resultado = validarDadosContacto(dados);
 
-        const isValidEmail = (email1) => emailRegex.test(email1);
-
-        console.log(`${email} é ${isValidEmail(email) ? 'valido' : 'invalido'}`);
-
-        let formValido = true;
-
-        // Validação simples se o campo está vazio
-        if (nome === '') {
-            mostrarErro('.nome_contacto', 'Nome é obrigatório');
-            formValido = false;
-        }
-        if (email === '') {
-            mostrarErro('.email_contacto', 'Email é obrigatório');
-            formValido = false;
-        } else if (!isValidEmail(email)) {
-            mostrarErro('.email_contacto', 'Email inválido (precisa ter @ e .)');
-            formValido = false;
-        }
-        if (assunto === '') {
-            mostrarErro('.assunto_contacto', 'Assunto é obrigatório');
-            formValido = false;
-        }
-        if (mensagem === '') {
-            mostrarErro('.mensagem_contacto', 'Mensagem é obrigatória');
-            formValido = false;
-        }
-
-        if (formValido) {
-            alert('Mensagem enviada com sucesso!');
+        if (!resultado.valido) {
+            if (resultado.erros.nome) {
+                mostrarErro('nome', resultado.erros.nome);
+            }
+            if (resultado.erros.email) {
+                mostrarErro('email', resultado.erros.email);
+            }
+            if (resultado.erros.telemovel) {
+                mostrarErro('telemovel', resultado.erros.telemovel);
+            }
+            if (resultado.erros.assunto) {
+                mostrarErro('assunto', resultado.erros.assunto);
+            }
+            if (resultado.erros.mensagem) {
+                mostrarErro('mensagem', resultado.erros.mensagem);
+            }
+        } else {
+            mostrarToast('Mensagem enviada com sucesso!', 'success');
             form.reset();
         }
     });
 }
 
-function mostrarErro(campoClass, mensagem) {
-    const campo = document.querySelector(campoClass);
-    const erroDiv = campo.nextElementSibling;
 
-    // Configurar a div de erro
-    erroDiv.style.visibility = 'visible';
-    erroDiv.style.color = 'red';
-    erroDiv.style.fontSize = '12px';
-    erroDiv.style.marginTop = '-5px';
-    erroDiv.style.marginBottom = '-5px';
-    erroDiv.style.marginLeft = '5px';
-    erroDiv.textContent = mensagem;
-    
-    campo.style.border = '1px solid red';
-}
+/**
+ * Adiciona listeners aos campos do formulário para limpar o estado de erro
+ * assim que o utilizador começa a interagir com o campo.
+ * @param {None} - Esta função não recebe parâmetros.
+ * @returns {void} - Esta função não retorna qualquer valor.
+ */
+function configurarLimpezaAutomaticaErros() {
+    const campos = ['nome', 'email', 'telemovel', 'assunto', 'mensagem'];
 
-function limparErros() {
-    // Remover a mensagem de erro
-    document.querySelectorAll('.mensagem-erro').forEach(function (elemento) {
-        elemento.style.visibility = 'hidden';
-        elemento.textContent = '';
-        elemento.style.marginTop = '3.5px';
-        elemento.style.marginBottom = '3.5px';
-    });
-    
-    // Restaurar bordas cinzentas
-    const campos = document.querySelectorAll('.nome_contacto, .email_contacto, .assunto_contacto, .mensagem_contacto');
-    campos.forEach(function (campo) {
-        campo.style.border = '1px solid #ccc';
+    campos.forEach(campo => {
+        document.getElementById(`${campo}_contacto`).addEventListener('input', function () {
+            this.style.border = '1px solid #ccc';
+            document.getElementById(`erro-${campo}`).style.visibility = 'hidden';
+        });
     });
 }
 
-// Função do botao para voltar para o topo da pagina
+
+/**
+ * Altera os estilos dos campos de input da secção do formulário para o caso de erro.
+ * @param {string} campoNome - O nome do campo (nome, email, telemovel, assunto, mensagem).
+ * @param {string} mensagem - A mensagem de erro a mostrar.
+ * @returns {void} - Esta função não retorna qualquer valor.
+ */
+function mostrarErro(campoNome, mensagem) {
+    document.getElementById(`${campoNome}_contacto`).style.border = '1px solid red';
+
+    document.getElementById(`erro-${campoNome}`).textContent = mensagem;
+    document.getElementById(`erro-${campoNome}`).style.visibility = 'visible';
+
+    if (campoNome === 'telemovel') {
+        document.getElementById(`erro-${campoNome}`).style.marginLeft = '103px';
+    }
+}
+
+
+/**
+ * Botão que aparece após dar scroll em 300 pixeis para voltar ao topo.
+ * @param {None} - Esta função não recebe parâmetros.
+ * @returns {void} - Esta função não retorna qualquer valor.
+ */
 function botaoTopo() {
     const btn = document.getElementById('toTop');
 
     function updateVisibility() {
         btn.hidden = window.scrollY <= 300;
     }
-    window.addEventListener('scroll', updateVisibility, { passive: true });
+    window.addEventListener('scroll', updateVisibility);
     updateVisibility();
 
     btn.addEventListener('click', () => {
@@ -200,42 +201,134 @@ function botaoTopo() {
 }
 
 
-// Função do carrossel
+/**
+ * Populates the telephone indicative select dropdown with all country options
+ * @param {None} - Esta função não recebe parâmetros.
+ * @returns {void} - Esta função não retorna qualquer valor.
+ */
+function popularIndicativosTelefone() {
+    const indicativos = [
+        { code: "+93", flag: "🇦🇫" }, { code: "+355", flag: "🇦🇱" }, { code: "+213", flag: "🇩🇿" },
+        { code: "+376", flag: "🇦🇩" }, { code: "+244", flag: "🇦🇴" }, { code: "+1264", flag: "🇦🇮" },
+        { code: "+1268", flag: "🇦🇬" }, { code: "+54", flag: "🇦🇷" }, { code: "+374", flag: "🇦🇲" },
+        { code: "+297", flag: "🇦🇼" }, { code: "+61", flag: "🇦🇺" }, { code: "+43", flag: "🇦🇹" },
+        { code: "+994", flag: "🇦🇿" }, { code: "+1242", flag: "🇧🇸" }, { code: "+973", flag: "🇧🇭" },
+        { code: "+880", flag: "🇧🇩" }, { code: "+1246", flag: "🇧🇧" }, { code: "+375", flag: "🇧🇾" },
+        { code: "+32", flag: "🇧🇪" }, { code: "+501", flag: "🇧🇿" }, { code: "+229", flag: "🇧🇯" },
+        { code: "+1441", flag: "🇧🇲" }, { code: "+975", flag: "🇧🇹" }, { code: "+591", flag: "🇧🇴" },
+        { code: "+387", flag: "🇧🇦" }, { code: "+267", flag: "🇧🇼" }, { code: "+55", flag: "🇧🇷" },
+        { code: "+673", flag: "🇧🇳" }, { code: "+359", flag: "🇧🇬" }, { code: "+226", flag: "🇧🇫" },
+        { code: "+257", flag: "🇧🇮" }, { code: "+855", flag: "🇰🇭" }, { code: "+237", flag: "🇨🇲" },
+        { code: "+1", flag: "🇨🇦" }, { code: "+238", flag: "🇨🇻" }, { code: "+1345", flag: "🇰🇾" },
+        { code: "+236", flag: "🇨🇫" }, { code: "+235", flag: "🇹🇩" }, { code: "+56", flag: "🇨🇱" },
+        { code: "+86", flag: "🇨🇳" }, { code: "+57", flag: "🇨🇴" }, { code: "+269", flag: "🇰🇲" },
+        { code: "+242", flag: "🇨🇬" }, { code: "+682", flag: "🇨🇰" }, { code: "+506", flag: "🇨🇷" },
+        { code: "+225", flag: "🇨🇮" }, { code: "+385", flag: "🇭🇷" }, { code: "+53", flag: "🇨🇺" },
+        { code: "+599", flag: "🇨🇼" }, { code: "+357", flag: "🇨🇾" }, { code: "+420", flag: "🇨🇿" },
+        { code: "+45", flag: "🇩🇰" }, { code: "+253", flag: "🇩🇯" }, { code: "+1767", flag: "🇩🇲" },
+        { code: "+1809", flag: "🇩🇴" }, { code: "+593", flag: "🇪🇨" }, { code: "+20", flag: "🇪🇬" },
+        { code: "+503", flag: "🇸🇻" }, { code: "+240", flag: "🇬🇶" }, { code: "+291", flag: "🇪🇷" },
+        { code: "+372", flag: "🇪🇪" }, { code: "+268", flag: "🇸🇿" }, { code: "+251", flag: "🇪🇹" },
+        { code: "+500", flag: "🇫🇰" }, { code: "+298", flag: "🇫🇴" }, { code: "+679", flag: "🇫🇯" },
+        { code: "+358", flag: "🇫🇮" }, { code: "+33", flag: "🇫🇷" }, { code: "+594", flag: "🇬🇫" },
+        { code: "+689", flag: "🇵🇫" }, { code: "+241", flag: "🇬🇦" }, { code: "+220", flag: "🇬🇲" },
+        { code: "+995", flag: "🇬🇪" }, { code: "+49", flag: "🇩🇪" }, { code: "+233", flag: "🇬🇭" },
+        { code: "+350", flag: "🇬🇮" }, { code: "+30", flag: "🇬🇷" }, { code: "+299", flag: "🇬🇱" },
+        { code: "+1473", flag: "🇬🇩" }, { code: "+590", flag: "🇬🇵" }, { code: "+1671", flag: "🇬🇺" },
+        { code: "+502", flag: "🇬🇹" }, { code: "+224", flag: "🇬🇳" }, { code: "+245", flag: "🇬🇼" },
+        { code: "+592", flag: "🇬🇾" }, { code: "+509", flag: "🇭🇹" }, { code: "+504", flag: "🇭🇳" },
+        { code: "+852", flag: "🇭🇰" }, { code: "+36", flag: "🇭🇺" }, { code: "+354", flag: "🇮🇸" },
+        { code: "+91", flag: "🇮🇳" }, { code: "+62", flag: "🇮🇩" }, { code: "+98", flag: "🇮🇷" },
+        { code: "+964", flag: "🇮🇶" }, { code: "+353", flag: "🇮🇪" }, { code: "+972", flag: "🇮🇱" },
+        { code: "+39", flag: "🇮🇹" }, { code: "+1876", flag: "🇯🇲" }, { code: "+81", flag: "🇯🇵" },
+        { code: "+962", flag: "🇯🇴" }, { code: "+7", flag: "🇰🇿" }, { code: "+254", flag: "🇰🇪" },
+        { code: "+686", flag: "🇰🇮" }, { code: "+383", flag: "🇽🇰" }, { code: "+965", flag: "🇰🇼" },
+        { code: "+996", flag: "🇰🇬" }, { code: "+856", flag: "🇱🇦" }, { code: "+371", flag: "🇱🇻" },
+        { code: "+961", flag: "🇱🇧" }, { code: "+266", flag: "🇱🇸" }, { code: "+231", flag: "🇱🇷" },
+        { code: "+218", flag: "🇱🇾" }, { code: "+423", flag: "🇱🇮" }, { code: "+370", flag: "🇱🇹" },
+        { code: "+352", flag: "🇱🇺" }, { code: "+853", flag: "🇲🇴" }, { code: "+261", flag: "🇲🇬" },
+        { code: "+265", flag: "🇲🇼" }, { code: "+60", flag: "🇲🇾" }, { code: "+960", flag: "🇲🇻" },
+        { code: "+223", flag: "🇲🇱" }, { code: "+356", flag: "🇲🇹" }, { code: "+692", flag: "🇲🇭" },
+        { code: "+596", flag: "🇲🇶" }, { code: "+222", flag: "🇲🇷" }, { code: "+230", flag: "🇲🇺" },
+        { code: "+52", flag: "🇲🇽" }, { code: "+691", flag: "🇫🇲" }, { code: "+373", flag: "🇲🇩" },
+        { code: "+377", flag: "🇲🇨" }, { code: "+976", flag: "🇲🇳" }, { code: "+382", flag: "🇲🇪" },
+        { code: "+1664", flag: "🇲🇸" }, { code: "+212", flag: "🇲🇦" }, { code: "+258", flag: "🇲🇿" },
+        { code: "+95", flag: "🇲🇲" }, { code: "+264", flag: "🇳🇦" }, { code: "+674", flag: "🇳🇷" },
+        { code: "+977", flag: "🇳🇵" }, { code: "+31", flag: "🇳🇱" }, { code: "+687", flag: "🇳🇨" },
+        { code: "+64", flag: "🇳🇿" }, { code: "+505", flag: "🇳🇮" }, { code: "+227", flag: "🇳🇪" },
+        { code: "+234", flag: "🇳🇬" }, { code: "+683", flag: "🇳🇺" }, { code: "+672", flag: "🇳🇫" },
+        { code: "+850", flag: "🇰🇵" }, { code: "+389", flag: "🇲🇰" }, { code: "+47", flag: "🇳🇴" },
+        { code: "+968", flag: "🇴🇲" }, { code: "+92", flag: "🇵🇰" }, { code: "+680", flag: "🇵🇼" },
+        { code: "+970", flag: "🇵🇸" }, { code: "+507", flag: "🇵🇦" }, { code: "+675", flag: "🇵🇬" },
+        { code: "+595", flag: "🇵🇾" }, { code: "+51", flag: "🇵🇪" }, { code: "+63", flag: "🇵🇭" },
+        { code: "+48", flag: "🇵🇱" }, { code: "+1787", flag: "🇵🇷" }, { code: "+974", flag: "🇶🇦" },
+        { code: "+262", flag: "🇷🇪" }, { code: "+40", flag: "🇷🇴" }, { code: "+7", flag: "🇷🇺" },
+        { code: "+250", flag: "🇷🇼" }, { code: "+590", flag: "🇧🇱" }, { code: "+1869", flag: "🇰🇳" },
+        { code: "+1758", flag: "🇱🇨" }, { code: "+590", flag: "🇲🇫" }, { code: "+508", flag: "🇵🇲" },
+        { code: "+1784", flag: "🇻🇨" }, { code: "+685", flag: "🇼🇸" }, { code: "+378", flag: "🇸🇲" },
+        { code: "+239", flag: "🇸🇹" }, { code: "+966", flag: "🇸🇦" }, { code: "+221", flag: "🇸🇳" },
+        { code: "+381", flag: "🇷🇸" }, { code: "+248", flag: "🇸🇨" }, { code: "+232", flag: "🇸🇱" },
+        { code: "+65", flag: "🇸🇬" }, { code: "+421", flag: "🇸🇰" }, { code: "+386", flag: "🇸🇮" },
+        { code: "+677", flag: "🇸🇧" }, { code: "+252", flag: "🇸🇴" }, { code: "+27", flag: "🇿🇦" },
+        { code: "+82", flag: "🇰🇷" }, { code: "+211", flag: "🇸🇸" }, { code: "+34", flag: "🇪🇸" },
+        { code: "+94", flag: "🇱🇰" }, { code: "+249", flag: "🇸🇩" }, { code: "+597", flag: "🇸🇷" },
+        { code: "+46", flag: "🇸🇪" }, { code: "+41", flag: "🇨🇭" }, { code: "+963", flag: "🇸🇾" },
+        { code: "+886", flag: "🇹🇼" }, { code: "+992", flag: "🇹🇯" }, { code: "+255", flag: "🇹🇿" },
+        { code: "+66", flag: "🇹🇭" }, { code: "+670", flag: "🇹🇱" }, { code: "+228", flag: "🇹🇬" },
+        { code: "+690", flag: "🇹🇰" }, { code: "+676", flag: "🇹🇴" }, { code: "+1868", flag: "🇹🇹" },
+        { code: "+216", flag: "🇹🇳" }, { code: "+90", flag: "🇹🇷" }, { code: "+993", flag: "🇹🇲" },
+        { code: "+1649", flag: "🇹🇨" }, { code: "+688", flag: "🇹🇻" }, { code: "+256", flag: "🇺🇬" },
+        { code: "+380", flag: "🇺🇦" }, { code: "+971", flag: "🇦🇪" }, { code: "+44", flag: "🇬🇧" },
+        { code: "+1", flag: "🇺🇸" }, { code: "+598", flag: "🇺🇾" }, { code: "+998", flag: "🇺🇿" },
+        { code: "+678", flag: "🇻🇺" }, { code: "+58", flag: "🇻🇪" }, { code: "+84", flag: "🇻🇳" },
+        { code: "+681", flag: "🇼🇫" }, { code: "+967", flag: "🇾🇪" }, { code: "+260", flag: "🇿🇲" },
+        { code: "+263", flag: "🇿🇼" }
+    ];
+
+    indicativos.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item.code;
+        option.textContent = `${item.flag} ${item.code}`;
+        document.querySelector('.indicativo_contacto').appendChild(option);
+    });
+}
+
+
+/**
+ * Função que cria o carrossel para a secção das noticias. Garante que dá para passar as noticias usando o rato, ao clicar nas setas
+ * laterais, com o TAB, tanto pressinando nas setas ou nos indicadores, ou então usando as setas para a esquerda e direita do computador.
+ * Também garante o scroll para a direita e esquerda nos modos mobile / tablet.
+ * @param {None} - Esta função não recebe parâmetros.
+ * @returns {void} - Esta função não retorna qualquer valor.
+ */
 function carrosselNoticias() {
     const slides = document.querySelectorAll('.carrossel-item');
     const prevBtn = document.querySelector('.carrossel-btn.prev');
     const nextBtn = document.querySelector('.carrossel-btn.next');
     const indicadores = document.querySelectorAll('.indicador');
 
-    const totalSlides = slides.length;
     let slideAtual = 0;
 
-    // Variveis para o touch
     const carrosselWrapper = document.querySelector('.carrossel-noticias');
     let touchStartX = 0;
     let touchEndX = 0;
     const swipeThreshold = 50;
-    
-    // Função para mostrar o slide atual
+
     function showSlide(index) {
-        
-        // Garantir que o índice está dentro dos limites
-         if (index < 0) {
-            index = totalSlides - 1;
-        } else if (index >= totalSlides) {
+        if (index < 0) {
+            index = slides.length - 1;
+        } else if (index >= slides.length) {
             index = 0;
         }
-        
+
         slideAtual = index;
-        
-        // Esconder todos os slides e mostrar apenas o atual
+
         slides.forEach(slide => {
             slide.classList.remove('active');
         });
-        // Mostrar slide atual
+
         slides[slideAtual].classList.add('active');
-        
-        // Atualizar indicadores
+
         indicadores.forEach((indicador, i) => {
             if (i === slideAtual) {
                 indicador.classList.add('active');
@@ -245,24 +338,20 @@ function carrosselNoticias() {
         });
     }
 
-    // Event listener para setas do teclado (acessibilidade)
-    document.addEventListener('keydown', function(e) {
-
-        // Verificar se o div do carrossel está visível no ecrã
+    document.addEventListener('keydown', function (tecla) {
         const noticiasSection = document.querySelector('.carrossel-noticias');
         const rect = noticiasSection.getBoundingClientRect();
         const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
-        
+
         if (isVisible) {
-            if (e.key === 'ArrowLeft') {
+            if (tecla.key === 'ArrowLeft') {
                 showSlide(slideAtual - 1);
-            } else if (e.key === 'ArrowRight') {
+            } else if (tecla.key === 'ArrowRight') {
                 showSlide(slideAtual + 1);
             }
         }
     });
 
-    // Event listeners para as setas
     prevBtn.addEventListener('click', () => {
         showSlide(slideAtual - 1);
     });
@@ -271,41 +360,43 @@ function carrosselNoticias() {
         showSlide(slideAtual + 1);
     });
 
-    // Event listeners para os indicadores
     indicadores.forEach((indicador, index) => {
         indicador.addEventListener('click', () => {
             showSlide(index);
         });
     });
 
-    if (carrosselWrapper) {
-        carrosselWrapper.addEventListener('touchstart', function(e) {
-            touchStartX = e.changedTouches[0].screenX;
-        }, { passive: true });
-        
-        carrosselWrapper.addEventListener('touchend', function(e) {
-            touchEndX = e.changedTouches[0].screenX;
-            const diff = touchStartX - touchEndX;
-            
-            if (Math.abs(diff) > swipeThreshold) {
-                if (diff > 0) {
-                    showSlide(slideAtual + 1); // Swipe esquerda
-                } else {
-                    showSlide(slideAtual - 1); // Swipe direita
-                }
-            }
-        }, { passive: true });
-    }
 
-    // Inicializar primeiro slide
+    carrosselWrapper.addEventListener('touchstart', function (touch) {
+        touchStartX = touch.changedTouches[0].screenX;
+    },);
+
+    carrosselWrapper.addEventListener('touchend', function (touch) {
+        touchEndX = touch.changedTouches[0].screenX;
+        const diff = touchStartX - touchEndX;
+
+        if (Math.abs(diff) > swipeThreshold) {
+            if (diff > 0) {
+                showSlide(slideAtual + 1);
+            } else {
+                showSlide(slideAtual - 1);
+            }
+        }
+    },);
+
     showSlide(0);
 }
 
-// Função hover
+
+/**
+ * Função que dá "vida" e animação às imagens que estão na secção dos parceiros. Ao passar o rato por cima, ou o TAB no modo de acessibilidade,
+ * as imagens ganham um realce que mostra um nome e faz uma animação.
+ * @param {None} - Esta função não recebe parâmetros.
+ * @returns {void} - Esta função não retorna qualquer valor.
+ */
 function hoverParceiros() {
     const parceirosBoxes = document.querySelectorAll('.grid-parceiros .grid-box');
 
-    // Mapeamento dos nomes completos (baseado nos alts das imagens)
     const nomesCompletos = {
         'UAC': 'Universidade dos Açores',
         'HDES': 'Hospital do Divino Espírito Santo',
@@ -313,14 +404,11 @@ function hoverParceiros() {
         'INOVA': 'Instituto de Inovação Tecnológica dos Açores',
     };
 
-    // Para cada parceiro, preparar o efeito
     parceirosBoxes.forEach((box) => {
-        // Obter a imagem e o seu texto alternativo
         const img = box.querySelector('img');
         const altText = img.getAttribute('alt') || '';
         const nomeCompleto = nomesCompletos[altText] || altText || 'Parceiro CACA';
 
-        // --- 1. Preparar o nome (se não existir) ---
         let nomeEl = box.querySelector('.parceiro-nome');
         if (!nomeEl) {
             nomeEl = document.createElement('div');
@@ -329,14 +417,12 @@ function hoverParceiros() {
             box.appendChild(nomeEl);
         }
 
-        // --- 2. Adicionar um overlay de brilho (se não existir) ---
         if (!box.querySelector('.parceiro-brilho')) {
             const brilhoEl = document.createElement('div');
             brilhoEl.className = 'parceiro-brilho';
             box.appendChild(brilhoEl);
         }
 
-        // --- 3. Eventos para rato (hover) ---
         box.addEventListener('mouseenter', function () {
             this.classList.add('hover-ativo');
             this.setAttribute('aria-label', `Parceiro: ${nomeCompleto} (em destaque)`);
@@ -347,7 +433,6 @@ function hoverParceiros() {
             this.setAttribute('aria-label', `Parceiro: ${nomeCompleto}`);
         });
 
-        // --- 4. Suporte para teclado (acessibilidade) ---
         box.addEventListener('focusin', function () {
             this.classList.add('hover-ativo');
         });
@@ -356,7 +441,6 @@ function hoverParceiros() {
             this.classList.remove('hover-ativo');
         });
 
-        // --- 5. Tornar o box focável ---
         if (!box.hasAttribute('tabindex')) {
             box.setAttribute('tabindex', '0');
         }
@@ -365,205 +449,189 @@ function hoverParceiros() {
     });
 }
 
-// ==================== DNA 3D NO NEWSLETTER ====================
-function initDNA3D() {
-    const container = document.getElementById('dna-container');
-    if (!container) return;
 
-    // Cores
-    const blue = 0x84D0F0;
-    const yellow = 0xFED162;
-    const purple = 0x651E59;
-
-    // Setup básico Three.js
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
-    camera.position.z = 20;
-
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(container.clientWidth, container.clientHeight);
-    renderer.setClearColor(0x000000, 0);
-    container.appendChild(renderer.domElement);
-
-    // Geometrias simplificadas
-    const tubeGeometry = new THREE.CylinderGeometry(0.3, 0.3, 6, 16);
-    const ballGeometry = new THREE.SphereGeometry(0.8, 16, 16);
-
-    // Materiais
-    const blueMaterial = new THREE.MeshBasicMaterial({ color: blue });
-    const yellowMaterial = new THREE.MeshBasicMaterial({ color: yellow });
-    const purpleMaterial = new THREE.MeshBasicMaterial({ color: purple });
-
-    // Grupo principal
-    const dnaGroup = new THREE.Group();
-
-    // Versão simplificada: apenas 20 camadas
-    for (let i = 0; i <= 20; i++) {
-        const row = new THREE.Group();
-        const yPos = i * 2 - 20; // Centraliza verticalmente
-
-        // Tubos laterais
-        const blueTube = new THREE.Mesh(tubeGeometry, blueMaterial);
-        blueTube.rotation.z = Math.PI/2;
-        blueTube.position.set(-3, 0, 0);
-
-        const yellowTube = new THREE.Mesh(tubeGeometry, yellowMaterial);
-        yellowTube.rotation.z = Math.PI/2;
-        yellowTube.position.set(3, 0, 0);
-
-        // Esferas das pontas
-        const ballLeft = new THREE.Mesh(ballGeometry, purpleMaterial);
-        ballLeft.position.set(-6, 0, 0);
-
-        const ballRight = new THREE.Mesh(ballGeometry, purpleMaterial);
-        ballRight.position.set(6, 0, 0);
-
-        // Monta a linha
-        row.add(blueTube, yellowTube, ballLeft, ballRight);
-        row.position.y = yPos;
-        row.rotation.y = i * 0.5; // Rotação progressiva
-
-        dnaGroup.add(row);
-    }
-
-    scene.add(dnaGroup);
-
-    // Animação simples
-    function animate() {
-        requestAnimationFrame(animate);
-        dnaGroup.rotation.x += 0.005;
-        dnaGroup.rotation.y += 0.01;
-        renderer.render(scene, camera);
-    }
-    animate();
-
-    // Redimensionamento
-    window.addEventListener('resize', () => {
-        const width = container.clientWidth;
-        const height = container.clientHeight;
-        camera.aspect = width / height;
-        camera.updateProjectionMatrix();
-        renderer.setSize(width, height);
-    });
-}
-
+/**
+ * Função simples que vai buscar o elemento com o id "pais" e adiciona as opções de todos os países. Feito aqui para deixar o código HTML mais clean.
+ * @param {None} - Esta função não recebe parâmetros.
+ * @returns {void} - Esta função não retorna qualquer valor.
+ */
 function listaPaises() {
-
-    const countries = [
-        "Afghanistan", "Åland Islands", "Albania", "Algeria", "American Samoa", "Andorra", "Angola",
-        "Anguilla", "Antarctica", "Antigua and Barbuda", "Argentina", "Armenia", "Aruba", "Australia",
-        "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium",
-        "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia (Plurinational State of)", "Bonaire, Sint Eustatius and Saba",
-        "Bosnia and Herzegovina", "Botswana", "Bouvet Island", "Brazil", "British Indian Ocean Territory",
-        "Brunei Darussalam", "Bulgaria", "Burkina Faso", "Burundi", "Cabo Verde", "Cambodia", "Cameroon",
-        "Canada", "Cayman Islands", "Central African Republic", "Chad", "Chile", "China", "Christmas Island",
-        "Cocos (Keeling) Islands", "Colombia", "Comoros", "Congo", "Congo (Democratic Republic of the)",
-        "Cook Islands", "Costa Rica", "Côte d'Ivoire", "Croatia", "Cuba", "Curaçao", "Cyprus", "Czechia",
-        "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador",
-        "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini", "Ethiopia", "Falkland Islands (Malvinas)",
-        "Faroe Islands", "Fiji", "Finland", "France", "French Guiana", "French Polynesia",
-        "French Southern Territories", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Gibraltar",
-        "Greece", "Greenland", "Grenada", "Guadeloupe", "Guam", "Guatemala", "Guernsey", "Guinea",
-        "Guinea-Bissau", "Guyana", "Haiti", "Heard Island and McDonald Islands", "Holy See", "Honduras",
-        "Hong Kong", "Hungary", "Iceland", "India", "Indonesia", "Iran (Islamic Republic of)", "Iraq",
-        "Ireland", "Isle of Man", "Israel", "Italy", "Jamaica", "Japan", "Jersey", "Jordan", "Kazakhstan",
-        "Kenya", "Kiribati", "Korea (Democratic People's Republic of)", "Korea (Republic of)", "Kuwait",
-        "Kyrgyzstan", "Lao People's Democratic Republic", "Latvia", "Lebanon", "Lesotho", "Liberia",
-        "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Macao", "Madagascar", "Malawi", "Malaysia",
-        "Maldives", "Mali", "Malta", "Marshall Islands", "Martinique", "Mauritania", "Mauritius",
-        "Mayotte", "Mexico", "Micronesia (Federated States of)", "Moldova (Republic of)", "Monaco",
-        "Mongolia", "Montenegro", "Montserrat", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru",
-        "Nepal", "Netherlands", "New Caledonia", "New Zealand", "Nicaragua", "Niger", "Nigeria",
-        "Niue", "Norfolk Island", "North Macedonia", "Northern Mariana Islands", "Norway", "Oman",
-        "Pakistan", "Palau", "Palestine, State of", "Panama", "Papua New Guinea", "Paraguay", "Peru",
-        "Philippines", "Pitcairn", "Poland", "Portugal", "Puerto Rico", "Qatar", "Réunion", "Romania",
-        "Russian Federation", "Rwanda", "Saint Barthélemy", "Saint Helena, Ascension and Tristan da Cunha",
-        "Saint Kitts and Nevis", "Saint Lucia", "Saint Martin (French part)", "Saint Pierre and Miquelon",
-        "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia",
-        "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Sint Maarten (Dutch part)",
-        "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa",
-        "South Georgia and the South Sandwich Islands", "South Sudan", "Spain", "Sri Lanka", "Sudan",
-        "Suriname", "Svalbard and Jan Mayen", "Sweden", "Switzerland", "Syrian Arab Republic",
-        "Taiwan (Province of China)", "Tajikistan", "Tanzania, United Republic of", "Thailand",
-        "Timor-Leste", "Togo", "Tokelau", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey",
-        "Turkmenistan", "Turks and Caicos Islands", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates",
-        "United Kingdom of Great Britain and Northern Ireland", "United States of America",
-        "United States Minor Outlying Islands", "Uruguay", "Uzbekistan", "Vanuatu",
-        "Venezuela (Bolivarian Republic of)", "Viet Nam", "Virgin Islands (British)",
-        "Virgin Islands (U.S.)", "Wallis and Futuna", "Western Sahara", "Yemen", "Zambia", "Zimbabwe"
+    const listaPaisesSimples = [
+        { flag: "🇦🇫", name: "Afghanistan" }, { flag: "🇦🇽", name: "Åland Islands" }, { flag: "🇦🇱", name: "Albania" },
+        { flag: "🇩🇿", name: "Algeria" }, { flag: "🇦🇸", name: "American Samoa" }, { flag: "🇦🇩", name: "Andorra" },
+        { flag: "🇦🇴", name: "Angola" }, { flag: "🇦🇮", name: "Anguilla" }, { flag: "🇦🇶", name: "Antarctica" },
+        { flag: "🇦🇬", name: "Antigua and Barbuda" }, { flag: "🇦🇷", name: "Argentina" }, { flag: "🇦🇲", name: "Armenia" },
+        { flag: "🇦🇼", name: "Aruba" }, { flag: "🇦🇺", name: "Australia" }, { flag: "🇦🇹", name: "Austria" },
+        { flag: "🇦🇿", name: "Azerbaijan" }, { flag: "🇧🇸", name: "Bahamas" }, { flag: "🇧🇭", name: "Bahrain" },
+        { flag: "🇧🇩", name: "Bangladesh" }, { flag: "🇧🇧", name: "Barbados" }, { flag: "🇧🇾", name: "Belarus" },
+        { flag: "🇧🇪", name: "Belgium" }, { flag: "🇧🇿", name: "Belize" }, { flag: "🇧🇯", name: "Benin" },
+        { flag: "🇧🇲", name: "Bermuda" }, { flag: "🇧🇹", name: "Bhutan" }, { flag: "🇧🇴", name: "Bolivia (Plurinational State of)" },
+        { flag: "🇧🇶", name: "Bonaire, Sint Eustatius and Saba" }, { flag: "🇧🇦", name: "Bosnia and Herzegovina" },
+        { flag: "🇧🇼", name: "Botswana" }, { flag: "🇧🇻", name: "Bouvet Island" }, { flag: "🇧🇷", name: "Brazil" },
+        { flag: "🇮🇴", name: "British Indian Ocean Territory" }, { flag: "🇧🇳", name: "Brunei Darussalam" },
+        { flag: "🇧🇬", name: "Bulgaria" }, { flag: "🇧🇫", name: "Burkina Faso" }, { flag: "🇧🇮", name: "Burundi" },
+        { flag: "🇨🇻", name: "Cabo Verde" }, { flag: "🇰🇭", name: "Cambodia" }, { flag: "🇨🇲", name: "Cameroon" },
+        { flag: "🇨🇦", name: "Canada" }, { flag: "🇰🇾", name: "Cayman Islands" }, { flag: "🇨🇫", name: "Central African Republic" },
+        { flag: "🇹🇩", name: "Chad" }, { flag: "🇨🇱", name: "Chile" }, { flag: "🇨🇳", name: "China" },
+        { flag: "🇨🇽", name: "Christmas Island" }, { flag: "🇨🇨", name: "Cocos (Keeling) Islands" },
+        { flag: "🇨🇴", name: "Colombia" }, { flag: "🇰🇲", name: "Comoros" }, { flag: "🇨🇬", name: "Congo" },
+        { flag: "🇨🇩", name: "Congo (Democratic Republic of the)" }, { flag: "🇨🇰", name: "Cook Islands" },
+        { flag: "🇨🇷", name: "Costa Rica" }, { flag: "🇨🇮", name: "Côte d'Ivoire" }, { flag: "🇭🇷", name: "Croatia" },
+        { flag: "🇨🇺", name: "Cuba" }, { flag: "🇨🇼", name: "Curaçao" }, { flag: "🇨🇾", name: "Cyprus" },
+        { flag: "🇨🇿", name: "Czechia" }, { flag: "🇩🇰", name: "Denmark" }, { flag: "🇩🇯", name: "Djibouti" },
+        { flag: "🇩🇲", name: "Dominica" }, { flag: "🇩🇴", name: "Dominican Republic" }, { flag: "🇪🇨", name: "Ecuador" },
+        { flag: "🇪🇬", name: "Egypt" }, { flag: "🇸🇻", name: "El Salvador" }, { flag: "🇬🇶", name: "Equatorial Guinea" },
+        { flag: "🇪🇷", name: "Eritrea" }, { flag: "🇪🇪", name: "Estonia" }, { flag: "🇸🇿", name: "Eswatini" },
+        { flag: "🇪🇹", name: "Ethiopia" }, { flag: "🇫🇰", name: "Falkland Islands (Malvinas)" }, { flag: "🇫🇴", name: "Faroe Islands" },
+        { flag: "🇫🇯", name: "Fiji" }, { flag: "🇫🇮", name: "Finland" }, { flag: "🇫🇷", name: "France" },
+        { flag: "🇬🇫", name: "French Guiana" }, { flag: "🇵🇫", name: "French Polynesia" }, { flag: "🇹🇫", name: "French Southern Territories" },
+        { flag: "🇬🇦", name: "Gabon" }, { flag: "🇬🇲", name: "Gambia" }, { flag: "🇬🇪", name: "Georgia" },
+        { flag: "🇩🇪", name: "Germany" }, { flag: "🇬🇭", name: "Ghana" }, { flag: "🇬🇮", name: "Gibraltar" },
+        { flag: "🇬🇷", name: "Greece" }, { flag: "🇬🇱", name: "Greenland" }, { flag: "🇬🇩", name: "Grenada" },
+        { flag: "🇬🇵", name: "Guadeloupe" }, { flag: "🇬🇺", name: "Guam" }, { flag: "🇬🇹", name: "Guatemala" },
+        { flag: "🇬🇬", name: "Guernsey" }, { flag: "🇬🇳", name: "Guinea" }, { flag: "🇬🇼", name: "Guinea-Bissau" },
+        { flag: "🇬🇾", name: "Guyana" }, { flag: "🇭🇹", name: "Haiti" }, { flag: "🇭🇲", name: "Heard Island and McDonald Islands" },
+        { flag: "⛑️", name: "Holy See" }, { flag: "🇭🇳", name: "Honduras" }, { flag: "🇭🇰", name: "Hong Kong" },
+        { flag: "🇭🇺", name: "Hungary" }, { flag: "🇮🇸", name: "Iceland" }, { flag: "🇮🇳", name: "India" },
+        { flag: "🇮🇩", name: "Indonesia" }, { flag: "🇮🇷", name: "Iran (Islamic Republic of)" }, { flag: "🇮🇶", name: "Iraq" },
+        { flag: "🇮🇪", name: "Ireland" }, { flag: "🇮🇲", name: "Isle of Man" }, { flag: "🇮🇱", name: "Israel" },
+        { flag: "🇮🇹", name: "Italy" }, { flag: "🇯🇲", name: "Jamaica" }, { flag: "🇯🇵", name: "Japan" },
+        { flag: "🇯🇪", name: "Jersey" }, { flag: "🇯🇴", name: "Jordan" }, { flag: "🇰🇿", name: "Kazakhstan" },
+        { flag: "🇰🇪", name: "Kenya" }, { flag: "🇰🇮", name: "Kiribati" }, { flag: "🇰🇵", name: "Korea (Democratic People's Republic of)" },
+        { flag: "🇰🇷", name: "Korea (Republic of)" }, { flag: "🇰🇼", name: "Kuwait" }, { flag: "🇰🇬", name: "Kyrgyzstan" },
+        { flag: "🇱🇦", name: "Lao People's Democratic Republic" }, { flag: "🇱🇻", name: "Latvia" }, { flag: "🇱🇧", name: "Lebanon" },
+        { flag: "🇱🇸", name: "Lesotho" }, { flag: "🇱🇷", name: "Liberia" }, { flag: "🇱🇾", name: "Libya" },
+        { flag: "🇱🇮", name: "Liechtenstein" }, { flag: "🇱🇹", name: "Lithuania" }, { flag: "🇱🇺", name: "Luxembourg" },
+        { flag: "🇲🇴", name: "Macao" }, { flag: "🇲🇬", name: "Madagascar" }, { flag: "🇲🇼", name: "Malawi" },
+        { flag: "🇲🇾", name: "Malaysia" }, { flag: "🇲🇻", name: "Maldives" }, { flag: "🇲🇱", name: "Mali" },
+        { flag: "🇲🇹", name: "Malta" }, { flag: "🇲🇭", name: "Marshall Islands" }, { flag: "🇲🇶", name: "Martinique" },
+        { flag: "🇲🇷", name: "Mauritania" }, { flag: "🇲🇺", name: "Mauritius" }, { flag: "🇾🇹", name: "Mayotte" },
+        { flag: "🇲🇽", name: "Mexico" }, { flag: "🇫🇲", name: "Micronesia (Federated States of)" }, { flag: "🇲🇩", name: "Moldova (Republic of)" },
+        { flag: "🇲🇨", name: "Monaco" }, { flag: "🇲🇳", name: "Mongolia" }, { flag: "🇲🇪", name: "Montenegro" },
+        { flag: "🇲🇸", name: "Montserrat" }, { flag: "🇲🇦", name: "Morocco" }, { flag: "🇲🇿", name: "Mozambique" },
+        { flag: "🇲🇲", name: "Myanmar" }, { flag: "🇳🇦", name: "Namibia" }, { flag: "🇳🇷", name: "Nauru" },
+        { flag: "🇳🇵", name: "Nepal" }, { flag: "🇳🇱", name: "Netherlands" }, { flag: "🇳🇨", name: "New Caledonia" },
+        { flag: "🇳🇿", name: "New Zealand" }, { flag: "🇳🇮", name: "Nicaragua" }, { flag: "🇳🇪", name: "Niger" },
+        { flag: "🇳🇬", name: "Nigeria" }, { flag: "🇳🇺", name: "Niue" }, { flag: "🇳🇫", name: "Norfolk Island" },
+        { flag: "🇲🇰", name: "North Macedonia" }, { flag: "🇲🇵", name: "Northern Mariana Islands" }, { flag: "🇳🇴", name: "Norway" },
+        { flag: "🇴🇲", name: "Oman" }, { flag: "🇵🇰", name: "Pakistan" }, { flag: "🇵🇼", name: "Palau" },
+        { flag: "🇵🇸", name: "Palestine, State of" }, { flag: "🇵🇦", name: "Panama" }, { flag: "🇵🇬", name: "Papua New Guinea" },
+        { flag: "🇵🇾", name: "Paraguay" }, { flag: "🇵🇪", name: "Peru" }, { flag: "🇵🇭", name: "Philippines" },
+        { flag: "🇵🇳", name: "Pitcairn" }, { flag: "🇵🇱", name: "Poland" }, { flag: "🇵🇹", name: "Portugal" },
+        { flag: "🇵🇷", name: "Puerto Rico" }, { flag: "🇶🇦", name: "Qatar" }, { flag: "🇷🇪", name: "Réunion" },
+        { flag: "🇷🇴", name: "Romania" }, { flag: "🇷🇺", name: "Russian Federation" }, { flag: "🇷🇼", name: "Rwanda" },
+        { flag: "🇧🇱", name: "Saint Barthélemy" }, { flag: "🇸🇭", name: "Saint Helena, Ascension and Tristan da Cunha" },
+        { flag: "🇰🇳", name: "Saint Kitts and Nevis" }, { flag: "🇱🇨", name: "Saint Lucia" }, { flag: "🇲🇫", name: "Saint Martin (French part)" },
+        { flag: "🇵🇲", name: "Saint Pierre and Miquelon" }, { flag: "🇻🇨", name: "Saint Vincent and the Grenadines" },
+        { flag: "🇼🇸", name: "Samoa" }, { flag: "🇸🇲", name: "San Marino" }, { flag: "🇸🇹", name: "Sao Tome and Principe" },
+        { flag: "🇸🇦", name: "Saudi Arabia" }, { flag: "🇸🇳", name: "Senegal" }, { flag: "🇷🇸", name: "Serbia" },
+        { flag: "🇸🇨", name: "Seychelles" }, { flag: "🇸🇱", name: "Sierra Leone" }, { flag: "🇸🇬", name: "Singapore" },
+        { flag: "🇸🇽", name: "Sint Maarten (Dutch part)" }, { flag: "🇸🇰", name: "Slovakia" }, { flag: "🇸🇮", name: "Slovenia" },
+        { flag: "🇸🇧", name: "Solomon Islands" }, { flag: "🇸🇴", name: "Somalia" }, { flag: "🇿🇦", name: "South Africa" },
+        { flag: "🇬🇸", name: "South Georgia and the South Sandwich Islands" }, { flag: "🇸🇸", name: "South Sudan" },
+        { flag: "🇪🇸", name: "Spain" }, { flag: "🇱🇰", name: "Sri Lanka" }, { flag: "🇸🇩", name: "Sudan" },
+        { flag: "🇸🇷", name: "Suriname" }, { flag: "🇸🇯", name: "Svalbard and Jan Mayen" }, { flag: "🇸🇪", name: "Sweden" },
+        { flag: "🇨🇭", name: "Switzerland" }, { flag: "🇸🇾", name: "Syrian Arab Republic" }, { flag: "🇹🇼", name: "Taiwan (Province of China)" },
+        { flag: "🇹🇯", name: "Tajikistan" }, { flag: "🇹🇿", name: "Tanzania, United Republic of" }, { flag: "🇹🇭", name: "Thailand" },
+        { flag: "🇹🇱", name: "Timor-Leste" }, { flag: "🇹🇬", name: "Togo" }, { flag: "🇹🇰", name: "Tokelau" },
+        { flag: "🇹🇴", name: "Tonga" }, { flag: "🇹🇹", name: "Trinidad and Tobago" }, { flag: "🇹🇳", name: "Tunisia" },
+        { flag: "🇹🇷", name: "Turkey" }, { flag: "🇹🇲", name: "Turkmenistan" }, { flag: "🇹🇨", name: "Turks and Caicos Islands" },
+        { flag: "🇹🇻", name: "Tuvalu" }, { flag: "🇺🇬", name: "Uganda" }, { flag: "🇺🇦", name: "Ukraine" },
+        { flag: "🇦🇪", name: "United Arab Emirates" }, { flag: "🇬🇧", name: "United Kingdom of Great Britain and Northern Ireland" },
+        { flag: "🇺🇸", name: "United States of America" }, { flag: "🇺🇲", name: "United States Minor Outlying Islands" },
+        { flag: "🇺🇾", name: "Uruguay" }, { flag: "🇺🇿", name: "Uzbekistan" }, { flag: "678", name: "Vanuatu" },
+        { flag: "🇻🇪", name: "Venezuela (Bolivarian Republic of)" }, { flag: "🇻🇳", name: "Viet Nam" },
+        { flag: "🇻🇬", name: "Virgin Islands (British)" }, { flag: "🇻🇮", name: "Virgin Islands (U.S.)" },
+        { flag: "🇼🇫", name: "Wallis and Futuna" }, { flag: "🇪🇭", name: "Western Sahara" }, { flag: "🇾🇪", name: "Yemen" },
+        { flag: "🇿🇲", name: "Zambia" }, { flag: "🇿🇿", name: "Zimbabwe" }
     ];
 
-    const paisSelect = document.getElementById('pais');
-
-    countries.forEach(country => {
+    listaPaisesSimples.forEach(country => {
         const option = document.createElement('option');
-        option.value = country;
-        option.textContent = country;
-        paisSelect.appendChild(option);
+        option.value = country.name;
+        option.textContent = `${country.flag} ${country.name}`;
+        document.getElementById('pais').appendChild(option);
     });
 };
 
 
-// ==================== GRÁFICO DE PRODUÇÃO ACADÊMICA ====================
-function criarGraficoProducao() {
-    // Dados para o gráfico
-    const data = [
-        {categoria: "Projetos", tipo: "Em curso", valor: 3},
-        {categoria: "Projetos", tipo: "Concluídos", valor: 6},
-        {categoria: "Estágios", tipo: "Em curso", valor: 8},
-        {categoria: "Estágios", tipo: "Concluídos", valor: 14},
-        {categoria: "Mestrados/Doutoramentos", tipo: "Em curso", valor: 4},
-        {categoria: "Mestrados/Doutoramentos", tipo: "Concluídos", valor: 9},
-        {categoria: "Publicações", tipo: "Indexadas", valor: 16},
-        {categoria: "Publicações", tipo: "Não indexadas", valor: 5}
-    ];
+/**
+ * Função que adiciona mais texto na secção das areas de investigação. Inicialmente o div com o texto extra está hidden e esta função vai alterando a sua visibilidade apenas.
+ * @param {None} - Esta função não recebe parâmetros.
+ * @returns {void} - Esta função não retorna qualquer valor.
+ */
+function expandirInvestigacao() {
+    document.querySelectorAll('.grid-box-investigacao a.saiba-mais').forEach((link) => {
+        const textoExtra = link.closest('.grid-box-investigacao').querySelector('.texto-extra');
 
-    // Configurações do gráfico
-    const width = 1550;
-    const marginTop = 30;
-    const marginRight = 150;
-    const marginBottom = 30;
-    const marginLeft = 180;
-
-    // Identificar tipos únicos
-    const tipos = Array.from(new Set(data.map(d => d.tipo)));
-
-    // Agrupar dados por categoria
-    const dadosAgrupados = Array.from(d3.group(data, d => d.categoria), ([categoria, valores]) => {
-        const obj = {categoria};
-        valores.forEach(v => obj[v.tipo] = v.valor);
-        return obj;
+        link.addEventListener('click', function () {
+            if (textoExtra.style.display === 'none') {
+                textoExtra.style.display = 'block';
+                link.textContent = 'Mostrar menos';
+            } else {
+                textoExtra.style.display = 'none';
+                link.textContent = 'Saiba mais';
+            }
+        });
     });
+}
 
-    // Criar o stack
-    const series = d3.stack().keys(tipos)(dadosAgrupados);
 
-    // Calcular altura
-    const height = series[0].length * 60 + marginTop + marginBottom;
+/**
+ * Altera o conteúdo da textarea 'mensagem' com base na 'opção' selecionada no assunto.
+ * @param {None} - Esta função não recebe parâmetros.
+ * @returns {void} - Esta função não retorna qualquer valor.
+ */
+function configurarMensagensPredefinidas() {
+    const mensagens = {
+        "default": "",
+        "opt1": "Solicito informações sobre o Centro Académico Clínico dos Açores, nomeadamente sobre os projetos em curso na área de investigação ",
+        "opt2": "Venho apresentar uma proposta de parceria/colaboração com o Centro Académico Clínico dos Açores. Estou disponível para uma reunião. ",
+        "opt3": "Venho manifestar interesse no recrutamento para ",
+        "opt4": "Manifesto interesse em participar no evento/seminário ",
+        "opt5": "Apresento a seguinte sugestão/reclamação: ",
+        "opt6": ""
+    };
 
-    // Escalas
-    const x = d3.scaleLinear()
-        .domain([0, d3.max(series, d => d3.max(d, d => d[1]))])
-        .range([marginLeft, width - marginRight]);
+    document.getElementById('assunto_contacto').addEventListener('change', function () {
+        document.getElementById('mensagem_contacto').value = mensagens[this.value];
+    });
+}
 
-    const y = d3.scaleBand()
-        .domain(dadosAgrupados.map(d => d.categoria))
-        .range([marginTop, height - marginBottom])
-        .padding(0.2);
 
-    const color = d3.scaleOrdinal()
-        .domain(tipos)
-        .range(["#1E88E5", "#FFC107", "#4CAF50", "#F44336"]);
+/**
+ * Função que gera o objeto DNA em 3D, utilizando o Three.js.
+ * Apenas vai buscar o elemento que está preparado e estilizado no código HTML e CSS, e gera lá dentro o objeto.
+ * @param {None} - Esta função não recebe parâmetros.
+ * @returns {void} - Esta função não retorna qualquer valor.
+ */
+function initDNA3D() {
+    const components = setupDNA3D();
+    if (!components) return;
 
-    // Criar SVG
-    const svg = d3.select("#grafico-producao")
-        .append("svg")
-        .attr("width", width)
-        .attr("height", height)
-        .attr("viewBox", [0, 0, width, height])
-        .attr("style", "max-width: 100%; height: auto;");
+    criarEstruturaDNA(components);
 
-    // Adicionar barras
+    components.scene.add(components.dnaGroup);
+
+    iniciarAnimacaoDNA(components);
+
+    configurarRedimensionamentoDNA(components);
+}
+
+
+/**
+ * Função que cria o gráfico de produção académica.
+ * Apenas vai buscar o div que está preparado e estilizado no código HTML e CSS, e gera lá dentro o objeto.
+ * @param {None} - Esta função não recebe parâmetros.
+ * @returns {void} - Esta função não retorna qualquer valor.
+ */
+function criarGraficoProducao() {
+    const { tipos, dadosAgrupados, series, alturaTotal } = processarDadosGrafico();
+
+    const { width, marginTop, marginRight, marginBottom, marginLeft, x, y, color } = definirDimensoesEEscalas(series, dadosAgrupados, tipos, alturaTotal);
+
+    const svg = criarSVG({ width, marginTop, marginRight, marginBottom, marginLeft }, alturaTotal);
+
     svg.append("g")
         .selectAll()
         .data(series)
@@ -579,7 +647,6 @@ function criarGraficoProducao() {
         .append("title")
         .text(d => `${d.data.categoria} - ${d.key}: ${d.data[d.key]}`);
 
-    // Valores numéricos nas barras (alinhados à direita)
     svg.append("g")
         .selectAll()
         .data(series)
@@ -595,10 +662,9 @@ function criarGraficoProducao() {
         .attr("font-weight", "bold")
         .text(d => d.data[d.key] || "");
 
-    // Eixos (com array para aplicar configurações em ambos os eixos)
     [
-        {axis: d3.axisTop(x).ticks(8), transform: `translate(0,${marginTop})`, classe: "eixo-x"},
-        {axis: d3.axisLeft(y).tickSizeOuter(0), transform: `translate(${marginLeft},0)`, classe: "eixo-y"}
+        { axis: d3.axisTop(x).ticks(4), transform: `translate(0,${marginTop})`, classe: "eixo-x" },
+        { axis: d3.axisLeft(y).tickSizeOuter(0), transform: `translate(${marginLeft},0)`, classe: "eixo-y" },
     ].forEach(e => {
         svg.append("g")
             .attr("transform", e.transform)
@@ -609,7 +675,6 @@ function criarGraficoProducao() {
                 .attr("font-weight", "500"));
     });
 
-    // Legenda
     const legend = svg.append("g")
         .attr("transform", `translate(${width - marginRight + 20}, ${marginTop})`);
 
@@ -628,43 +693,5 @@ function criarGraficoProducao() {
             .attr("text-anchor", "start")
             .style("font-size", "14px")
             .text(tipo);
-    });
-}
-
-function expandirInvestigacao() {
-    // Vai buscar todos os elementos que contem
-    const saibaMaisLinks = document.querySelectorAll('.grid-box-investigacao a.saiba-mais');
-    
-    // Para cada elemento
-    saibaMaisLinks.forEach((link, index) => {
-
-        // Texto adicional para cada área
-        const textosExtras = [
-            'A investigação nesta área procura identificar padrões de doença, fatores de risco e tendências de saúde na população açoriana. A análise de dados clínicos e demográficos permite apoiar políticas públicas, orientar programas de prevenção e melhorar a resposta dos serviços de saúde às necessidades da população. A colaboração entre investigadores, profissionais de saúde e instituições académicas permite desenvolver estudos populacionais, bases de dados regionais e metodologias de análise estatística aplicadas à saúde pública. Esta abordagem contribui para uma melhor compreensão das particularidades epidemiológicas de regiões insulares. A área de epidemiologia do CACA integra uma equipa multidisciplinar de investigadores e estudantes de pós-graduação. Atualmente estão em desenvolvimento vários projetos de investigação e estudos populacionais, que já resultaram em diversas publicações científicas e dissertações de mestrado e doutoramento dedicadas à saúde pública e às doenças genéticas na região.',
-            'A investigação nesta área foca-se no desenvolvimento e avaliação de tecnologias digitais que permitam melhorar o acesso aos cuidados de saúde, especialmente em regiões geograficamente dispersas. As soluções incluem sistemas de teleconsulta, monitorização remota de pacientes e plataformas de apoio à decisão clínica. A aplicação de tecnologias digitais na saúde permite reduzir tempos de resposta, otimizar recursos médicos e facilitar a comunicação entre diferentes unidades de saúde. Em contextos insulares, estas ferramentas têm um papel particularmente relevante na melhoria da continuidade dos cuidados. A área de telemedicina do CACA envolve investigadores das áreas da saúde, informática e engenharia, desenvolvendo projetos de inovação tecnológica em colaboração com unidades de saúde regionais. Estes projetos já deram origem a várias publicações científicas, protótipos de plataformas digitais e trabalhos académicos de mestrado e doutoramento.',
-            'A investigação nesta área procura compreender os fatores biológicos, psicológicos e sociais que influenciam o bem-estar mental da população. Estudos desenvolvidos no CACA analisam o impacto de estilos de vida, atividade física e contextos sociais na saúde mental. Um dos focos principais é a promoção de estratégias de prevenção e intervenção que possam melhorar a qualidade de vida das populações. Programas comunitários de exercício físico, educação para a saúde e promoção de hábitos saudáveis têm sido estudados como formas de reduzir fatores de risco associados à ansiedade, depressão e outros problemas de saúde mental. A equipa de investigação em saúde mental reúne investigadores, profissionais de saúde e estudantes de pós-graduação que desenvolvem projetos interdisciplinares na área da promoção da saúde. Estes trabalhos têm contribuído para a produção de artigos científicos, dissertações académicas e projetos aplicados em colaboração com instituições regionais.'
-        ];
-        
-        // Criar elemento para o texto extra
-        const textoExtra = document.createElement('div');
-        textoExtra.className = 'texto-extra';
-        textoExtra.style.display = 'none';
-        textoExtra.style.marginTop = '15px';
-        textoExtra.textContent = textosExtras[index];
-        
-        // Inserir após o saiba mais
-        link.insertAdjacentElement('afterend', textoExtra);
-        
-        // Evento de click
-        link.addEventListener('click', function() {
-            // Alternar visibilidade
-            if (textoExtra.style.display === 'none') {
-                textoExtra.style.display = 'block';
-                this.textContent = 'Mostrar menos';
-            } else {
-                textoExtra.style.display = 'none';
-                this.textContent = 'Saiba mais';
-            }
-        });
     });
 }
