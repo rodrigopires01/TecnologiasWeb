@@ -11,7 +11,7 @@
 		rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="css/stylesheet.css">
-	<script src="js/javascript.js"></script>
+	<script type="module" src="js/javascript.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 	<script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
@@ -182,14 +182,15 @@
 			
 				<div class="newsletter-container">
 					<div class="newsletter-logotipo3d">
-						<div id="dna-container" style="width: 100%; height: 100%;"></div>
+						<div id="dna-container"></div>
 					</div>
 					<div class="newsletter-formulario">
-						<h3 style="text-align: center; margin-bottom: 50px;">Subscreva a nossa newsletter!</h3>
+						<h3>Subscreva a nossa newsletter!</h3>
 						<form aria-label="Formulário de subscrição da newsletter">
-							<input type="email" placeholder="Insira o seu e-mail aqui" class="email_newsletter" aria-label="Endereço de e-mail" required>
+							<input type="email" placeholder="  📧 Insira o seu e-mail aqui" class="email_newsletter" aria-label="Endereço de e-mail" required>
+
 							<select id="pais" aria-label="País de residência" class="pais_selector" required>
-								<option value="default">Selecione o seu país</option>
+								<option value="default">🏳️ Selecione o seu país</option>
 							</select>
 							<button type="submit" class="enviar_newsletter">Subscrever</button>				
 						</form>
@@ -208,7 +209,10 @@
 						<p>A epidemiologia é a ciência que estuda a distribuição, determinantes e prevenção de doenças
 							em populações, sendo essencial para a tomada de decisões em saúde pública. Nos Açores, a doença
 							Machado-Joseph é estudada epidemiologicamente, permitindo compreender sua prevalência, risco
-							e impacto na comunidade. <a class="saiba-mais" tabindex="0" role="button" aria-label="Expandir informações sobre epidemiologia">Saiba mais</a></p>
+							e impacto na comunidade. 
+							<a class="saiba-mais" tabindex="0" role="button" aria-label="Expandir informações sobre epidemiologia">Saiba mais</a>
+							<div class="texto-extra">A investigação nesta área procura identificar padrões de doença, fatores de risco e tendências de saúde na população açoriana. A análise de dados clínicos e demográficos permite apoiar políticas públicas, orientar programas de prevenção e melhorar a resposta dos serviços de saúde às necessidades da população. A colaboração entre investigadores, profissionais de saúde e instituições académicas permite desenvolver estudos populacionais, bases de dados regionais e metodologias de análise estatística aplicadas à saúde pública. Esta abordagem contribui para uma melhor compreensão das particularidades epidemiológicas de regiões insulares. A área de epidemiologia do CACA integra uma equipa multidisciplinar de investigadores e estudantes de pós-graduação. Atualmente estão em desenvolvimento vários projetos de investigação e estudos populacionais, que já resultaram em diversas publicações científicas e dissertações de mestrado e doutoramento dedicadas à saúde pública e às doenças genéticas na região.</div>
+						</p>
 						<p><strong>Professor Responsável: </strong>Maria Silva<br>
 							<strong>Contacto:</strong> <a href="mailto:maria.silva@uac.pt" aria-label="Enviar e-mail para Maria Silva">maria.silva@uac.pt</a>
 						</p>
@@ -219,7 +223,9 @@
 							plataformas que garantem a integridade dos dados, protocolos automáticos para a triagem eficiente e
 							acesso rápido a histórico clínico. Nos Açores, a telemedicina pode permitir encaminhamentos rápidos entre
 							ilhas, gerindo os diferentes recursos e incluindo a transferência segura de informações clínicas. 
-							<a class="saiba-mais" tabindex="0" role="button" aria-label="Expandir informações sobre telemedicina">Saiba mais</a></p>
+							<a class="saiba-mais" tabindex="0" role="button" aria-label="Expandir informações sobre telemedicina">Saiba mais</a>
+							<div class="texto-extra">A investigação nesta área procura identificar padrões de doença, fatores de risco e tendências de saúde na população açoriana. A análise de dados clínicos e demográficos permite apoiar políticas públicas, orientar programas de prevenção e melhorar a resposta dos serviços de saúde às necessidades da população. A colaboração entre investigadores, profissionais de saúde e instituições académicas permite desenvolver estudos populacionais, bases de dados regionais e metodologias de análise estatística aplicadas à saúde pública. Esta abordagem contribui para uma melhor compreensão das particularidades epidemiológicas de regiões insulares. A área de epidemiologia do CACA integra uma equipa multidisciplinar de investigadores e estudantes de pós-graduação. Atualmente estão em desenvolvimento vários projetos de investigação e estudos populacionais, que já resultaram em diversas publicações científicas e dissertações de mestrado e doutoramento dedicadas à saúde pública e às doenças genéticas na região.</div>
+						</p>
 						<p><strong>Professor Responsável: </strong>Ana Campos<br>
 							<strong>Contacto:</strong> <a href="mailto:ana.campos@uac.pt" aria-label="Enviar e-mail para Ana Campos">ana.campos@uac.pt</a>
 						</p>
@@ -230,15 +236,17 @@
 							influenciando como pensa, sente e age no dia a dia, bem como a capacidade de lidar com o stress, relacionar-se
 							e tomar decisões. Sendo os Açores a região do país com maior taxa de obesidade e suicídios, a
 							promoção estruturada do exercício físico pode contribuir simultaneamente para a saúde física e mental. 
-							<a class="saiba-mais" tabindex="0" role="button" aria-label="Expandir informações sobre saúde mental">Saiba mais</a></p>
+							<a class="saiba-mais" tabindex="0" role="button" aria-label="Expandir informações sobre saúde mental">Saiba mais</a>
+							<div class="texto-extra">A investigação nesta área procura identificar padrões de doença, fatores de risco e tendências de saúde na população açoriana. A análise de dados clínicos e demográficos permite apoiar políticas públicas, orientar programas de prevenção e melhorar a resposta dos serviços de saúde às necessidades da população. A colaboração entre investigadores, profissionais de saúde e instituições académicas permite desenvolver estudos populacionais, bases de dados regionais e metodologias de análise estatística aplicadas à saúde pública. Esta abordagem contribui para uma melhor compreensão das particularidades epidemiológicas de regiões insulares. A área de epidemiologia do CACA integra uma equipa multidisciplinar de investigadores e estudantes de pós-graduação. Atualmente estão em desenvolvimento vários projetos de investigação e estudos populacionais, que já resultaram em diversas publicações científicas e dissertações de mestrado e doutoramento dedicadas à saúde pública e às doenças genéticas na região.</div>
+						</p>
 						<p><strong>Professor Responsável: </strong>José Rocha<br>
 							<strong>Contacto:</strong> <a href="mailto:jose.rocha@uac.pt" aria-label="Enviar e-mail para José Rocha">jose.rocha@uac.pt</a>
 						</p>
 					</div>
 				</div>
-				
+
 				<div class="grafico-container">
-					<h3 style="text-align: center; padding-top: 30px;">Produção Académica e Científica</h3>
+					<h3>Produção Académica e Científica</h3>
 					<div id="grafico-producao" role="img" aria-label="Gráfico de barras mostrando a produção académica por categoria">
 						<!-- grafico gerado no js -->
 					</div>
@@ -279,42 +287,44 @@
 
 					<div class="oportunidades-content">
 						<p>Recrutamentos em curso no Centro Académico Clínico dos Açores:</p>
-
-						<table aria-label="Tabela de oportunidades de recrutamento">
-							<thead>
-								<tr>
-									<th scope="col">Vaga</th>
-									<th scope="col">Modalidade</th>
-									<th scope="col">Enquadramento</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td>Estágio</td>
-									<td>Voluntariado</td>
-									<td>Iniciação científica em utilização de bases de dados para triagem e diagnóstico
-										médico. FCT/UAc.
-										<a href="https://www.google.com/" target="_blank" aria-label="Ver mais detalhes sobre estágio (abre nova página)">Ver mais</a>
-									</td>
-								</tr>
-								<tr>
-									<td>Bolsa de Doutoramento</td>
-									<td>Bolseiro</td>
-									<td>Investigação sobre as variações genéticas da Doença de Machado-Joseph nos
-										Açores. FCT/UAc e HDES.
-										<a href="https://www.google.com/" target="_blank" aria-label="Ver mais detalhes sobre bolsa de doutoramento (abre nova página)">Ver mais</a>
-									</td>
-								</tr>
-								<tr>
-									<td>Técnico Superior</td>
-									<td>Contrato com termo certo</td>
-									<td>Técnico para projeto de investigação sobre o efeito da atividade física na saúde
-										mental. FCSH e UISM. 
-										<a href="https://www.google.com/" target="_blank" aria-label="Ver mais detalhes sobre vaga de técnico superior (abre nova página)">Ver mais</a>
-									</td>
-								</tr>
-							</tbody>
-						</table>
+						<div class="tabela-content">
+							<table class="tabela-oportunidades" id="tabela-oportunidades">
+								<thead>
+									<tr>
+										<th>Nome da Oportunidade</th>
+										<th>Área</th>
+										<th>Modalidade</th>
+										<th>Estado</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>Bolsa de Investigação Epidemiológica</td>
+										<td>Saúde Pública</td>
+										<td>Voluntariado</td>
+										<td><a href="https://www.google.com" target="_blank" class="status aberta">ABERTA</a></td>
+									</tr>
+									<tr>
+										<td>Estágio Clínico - Medicina Interna</td>
+										<td>Clínica</td>
+										<td>Bolseiro</td>
+										<td><a href="https://www.google.com" target="_blank" class="status aberta">ABERTA</a></td>
+									</tr>
+									<tr>
+										<td>Projeto de Monitorização Genética</td>
+										<td>Genética</td>
+										<td>Contrato com termo certo</td>
+										<td><span class="status fechada">FECHADA</span></td>
+									</tr>
+									<tr>
+										<td>Doutoramento em Ciências Biomédicas</td>
+										<td>Investigação</td>
+										<td>Bolseiro</td>
+										<td><a href="https://www.google.com" target="_blank" class="status aberta">ABERTA</a></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
 					</div>
 				</div>
 			</section>
@@ -333,33 +343,52 @@
 					</div>
 					
 					<div class="contacto-info">
-						<h4>Morada:</h4>
+						<h4>📍 Morada:</h4>
 						<p>Centro Académico Clínico dos Açores</p>
 						<p>Universidade dos Açores</p>
 						<p>Campus Universitário de Ponta Delgada</p>
 						<p>9500-018 Ponta Delgada</p>
 						<p>Ilha de São Miguel - Açores - Portugal</p>
-						<br>
-						<h4>Telefone:</h4>
+						<br><br>
+						<h4>📞 Telefone:</h4>
 						<p>(+351) 296 650 000</p>
-						<br>
-						<h4>Email:</h4>
+						<br><br>
+						<h4>📧 Email:</h4>
 						<a href="mailto:caca@uac.pt" aria-label="Enviar e-mail para caca@uac.pt">caca@uac.pt</a>
 					</div>
 					
 					<div class="contacto-form">
 						<h4>Contacte-nos:</h4>
 						<form aria-label="Formulário de contacto">
-							<input type="text" placeholder="Nome Completo" class="nome_contacto" aria-label="Nome completo" >
-							<div class="mensagem-erro" aria-label="Nome não pode estar vazio"></div>
-							<input type="email" placeholder="Email" class="email_contacto" aria-label="Endereço de e-mail" >
-							<div class="mensagem-erro" aria-label="Email não pode estar vazio"></div>
-							<input type="text" placeholder="Assunto" class="assunto_contacto" aria-label="Assunto da mensagem" >
-							<div class="mensagem-erro" aria-label="Assunto não pode estar vazio"></div>
-							<textarea placeholder="Mensagem" class="mensagem_contacto" aria-label="Conteúdo da mensagem" ></textarea>
-							<div class="mensagem-erro" aria-label="Mensagem não pode estar vazio"></div>
-							<button type="submit" class="enviar">Enviar mensagem</button>
+							<input type="text" placeholder="Nome Completo" class="nome_contacto" id="nome_contacto" aria-label="Nome completo">
+							<div class="mensagem-erro" id="erro-nome" aria-label="Nome não pode estar vazio"></div>
 
+							<input type="email" placeholder="Email" class="email_contacto" id="email_contacto" aria-label="Endereço de e-mail">
+							<div class="mensagem-erro" id="erro-email" aria-label="Email não pode estar vazio"></div>
+
+							<div class="telemovel-group">
+								<select aria-label="País de residência" class="indicativo_contacto" required>
+									    <option value="+351">🇵🇹 +351</option>
+								</select>
+								<input type="tel" placeholder="Número de Telemóvel" class="telemovel_contacto" id="telemovel_contacto">
+							</div>
+							<div class="mensagem-erro" id="erro-telemovel" aria-label="Telemóvel não pode estar vazio"></div>
+
+							<select class="assunto_contacto" id="assunto_contacto" aria-label="Assunto da mensagem">
+								<option value="default">Selecione um assunto</option>
+								<option value="opt1">Pedido de informações</option>
+								<option value="opt2">Proposta de parceria/colaboração</option>
+								<option value="opt3">Informações sobre oportunidades</option>
+								<option value="opt4">Participação em eventos/seminários</option>
+								<option value="opt5">Sugestão/Reclamação</option>
+								<option value="opt6">Outro Assunto</option>
+							</select>
+							<div class="mensagem-erro" id="erro-assunto" aria-label="Assunto não pode estar vazio"></div>
+
+							<textarea placeholder="Mensagem" class="mensagem_contacto" id="mensagem_contacto" aria-label="Conteúdo da mensagem"></textarea>
+							<div class="mensagem-erro" id="erro-mensagem" aria-label="Mensagem não pode estar vazio"></div>
+							
+							<button type="submit" class="enviar">Enviar mensagem</button>
 						</form>
 					</div>
 				</div>
