@@ -301,6 +301,13 @@ function popularIndicativosTelefone() {
  * @param {None} - Esta função não recebe parâmetros.
  * @returns {void} - Esta função não retorna qualquer valor.
  */
+/**
+ * Função que cria o carrossel para a secção das noticias. Garante que dá para passar as noticias usando o rato, ao clicar nas setas
+ * laterais, com o TAB, tanto pressinando nas setas ou nos indicadores, ou então usando as setas para a esquerda e direita do computador.
+ * Também garante o scroll para a direita e esquerda nos modos mobile / tablet.
+ * @param {None} - Esta função não recebe parâmetros.
+ * @returns {void} - Esta função não retorna qualquer valor.
+ */
 function carrosselNoticias() {
     const slides = document.querySelectorAll('.carrossel-item');
     const prevBtn = document.querySelector('.carrossel-btn.prev');
@@ -314,29 +321,7 @@ function carrosselNoticias() {
     let touchEndX = 0;
     const swipeThreshold = 50;
 
-    function showSlide(index) {
-        if (index < 0) {
-            index = slides.length - 1;
-        } else if (index >= slides.length) {
-            index = 0;
-        }
-
-        slideAtual = index;
-
-        slides.forEach(slide => {
-            slide.classList.remove('active');
-        });
-
-        slides[slideAtual].classList.add('active');
-
-        indicadores.forEach((indicador, i) => {
-            if (i === slideAtual) {
-                indicador.classList.add('active');
-            } else {
-                indicador.classList.remove('active');
-            }
-        });
-    }
+    showSlide(slideAtual, slides, indicadores);
 
     document.addEventListener('keydown', function (tecla) {
         const noticiasSection = document.querySelector('.carrossel-noticias');
@@ -345,31 +330,35 @@ function carrosselNoticias() {
 
         if (isVisible) {
             if (tecla.key === 'ArrowLeft') {
-                showSlide(slideAtual - 1);
+                slideAtual = getNewSlideIndex(slideAtual - 1, slides.length);
+                showSlide(slideAtual, slides, indicadores);
             } else if (tecla.key === 'ArrowRight') {
-                showSlide(slideAtual + 1);
+                slideAtual = getNewSlideIndex(slideAtual + 1, slides.length);
+                showSlide(slideAtual, slides, indicadores);
             }
         }
     });
 
     prevBtn.addEventListener('click', () => {
-        showSlide(slideAtual - 1);
+        slideAtual = getNewSlideIndex(slideAtual - 1, slides.length);
+        showSlide(slideAtual, slides, indicadores);
     });
 
     nextBtn.addEventListener('click', () => {
-        showSlide(slideAtual + 1);
+        slideAtual = getNewSlideIndex(slideAtual + 1, slides.length);
+        showSlide(slideAtual, slides, indicadores);
     });
 
     indicadores.forEach((indicador, index) => {
         indicador.addEventListener('click', () => {
-            showSlide(index);
+            slideAtual = index;
+            showSlide(slideAtual, slides, indicadores);
         });
     });
 
-
     carrosselWrapper.addEventListener('touchstart', function (touch) {
         touchStartX = touch.changedTouches[0].screenX;
-    },);
+    });
 
     carrosselWrapper.addEventListener('touchend', function (touch) {
         touchEndX = touch.changedTouches[0].screenX;
@@ -377,14 +366,51 @@ function carrosselNoticias() {
 
         if (Math.abs(diff) > swipeThreshold) {
             if (diff > 0) {
-                showSlide(slideAtual + 1);
+                slideAtual = getNewSlideIndex(slideAtual + 1, slides.length);
             } else {
-                showSlide(slideAtual - 1);
+                slideAtual = getNewSlideIndex(slideAtual - 1, slides.length);
             }
+            showSlide(slideAtual, slides, indicadores);
         }
-    },);
+    });
+}
 
-    showSlide(0);
+/**
+ * Calcula o novo índice do slide com wrap-around.
+ * @param {number} index - O índice proposto.
+ * @param {number} totalSlides - Número total de slides.
+ * @returns {number} - O novo índice válido.
+ */
+function getNewSlideIndex(index, totalSlides) {
+    if (index < 0) {
+        return totalSlides - 1;
+    } else if (index >= totalSlides) {
+        return 0;
+    }
+    return index;
+}
+
+/**
+ * Mostra o slide correspondente ao índice fornecido.
+ * @param {number} index - O índice do slide a mostrar.
+ * @param {NodeList} slides - Lista de elementos do carrossel.
+ * @param {NodeList} indicadores - Lista de elementos indicadores.
+ * @returns {void} - Esta função não retorna qualquer valor.
+ */
+function showSlide(index, slides, indicadores) {
+    slides.forEach(slide => {
+        slide.classList.remove('active');
+    });
+
+    slides[index].classList.add('active');
+
+    indicadores.forEach((indicador, i) => {
+        if (i === index) {
+            indicador.classList.add('active');
+        } else {
+            indicador.classList.remove('active');
+        }
+    });
 }
 
 
