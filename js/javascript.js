@@ -117,11 +117,15 @@ function validarFormulario() {
             nome: document.getElementById('nome_contacto').value.trim(),
             email: document.getElementById('email_contacto').value.trim(),
             telemovel: document.getElementById('telemovel_contacto').value.trim(),
+            indicativo: document.querySelector('.indicativo_contacto').value.trim(),
             assunto: document.getElementById('assunto_contacto').value.trim(),
             mensagem: document.getElementById('mensagem_contacto').value.trim()
         };
 
+        limparErros();
+
         const resultado = validarDadosContacto(dados);
+        console.log(resultado);
 
         if (!resultado.valido) {
             if (resultado.erros.nome) {
@@ -143,6 +147,20 @@ function validarFormulario() {
             mostrarToast('Mensagem enviada com sucesso!', 'success');
             form.reset();
         }
+    });
+}
+
+
+function limparErros() {
+    document.querySelectorAll('.mensagem-erro').forEach(function (elemento) {
+        elemento.style.visibility = 'hidden';
+        elemento.textContent = '';
+        elemento.style.marginTop = '3.5px';
+        elemento.style.marginBottom = '3.5px';
+    });
+
+    document.querySelectorAll('.nome_contacto, .email_contacto, .assunto_contacto, .mensagem_contacto').forEach(function (campo) {
+        campo.style.border = '1px solid #ccc';
     });
 }
 
@@ -178,7 +196,7 @@ function mostrarErro(campoNome, mensagem) {
     document.getElementById(`erro-${campoNome}`).style.visibility = 'visible';
 
     if (campoNome === 'telemovel') {
-        document.getElementById(`erro-${campoNome}`).style.marginLeft = '103px';
+        document.getElementById(`erro-${campoNome}`).style.marginLeft = '107px';
     }
 }
 
@@ -623,6 +641,8 @@ function configurarMensagensPredefinidas() {
 
     document.getElementById('assunto_contacto').addEventListener('change', function () {
         document.getElementById('mensagem_contacto').value = mensagens[this.value];
+
+        document.getElementById('mensagem_contacto').dispatchEvent(new Event('input'));
     });
 }
 
