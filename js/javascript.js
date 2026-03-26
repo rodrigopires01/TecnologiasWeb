@@ -5,6 +5,8 @@ import { setupDNA3D, criarEstruturaDNA, iniciarAnimacaoDNA, configurarRedimensio
 /**
  * Primeiro event listener do site
  * Aguarda o carregamento total do DOM para executar as funções de setup do site.
+ * @listens DOMContentLoaded - Executa quando o dom for todo carregado
+ * @returns {void} - Esta função não retorna qualquer valor.
  */
 document.addEventListener('DOMContentLoaded', function () {
     fecharMenuHamburger();
