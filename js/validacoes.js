@@ -3,7 +3,7 @@
  * @param {string} email - O endereço de e-mail a validar.
  * @returns {boolean} - Retorna true se o e-mail for válido, false caso contrário.
  */
-export function eEmailValido(email) {
+function eEmailValido(email) {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*\.[a-zA-Z]{2,3}$/;
     return emailRegex.test(email.trim());
 }
