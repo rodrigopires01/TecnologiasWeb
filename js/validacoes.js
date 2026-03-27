@@ -36,11 +36,11 @@ function validarTelemovelPorPais(telemovel, indicativo) {
     if (pattern) {
         if (!pattern.test(telemovel)) {
             const mensagens = {
-                '+351': 'Número 🇵🇹 inválido. Deve ter 9 dígitos e começar com 9 (ex: 912345678)',
-                '+33': 'Número 🇫🇷 inválido. Deve ter 9 dígitos e começar com 6 ou 7 (ex: 612345678)',
-                '+44': 'Número 🇬🇧 inválido. Deve ter 10 dígitos e começar com 7 (ex: 7123456789)',
-                '+34': 'Número 🇪🇸 inválido. Deve ter 9 dígitos e começar com 6 ou 7 (ex: 612345678)',
-                '+49': 'Número 🇩🇪 inválido. Deve ter 10 dígitos e começar com 15, 16 ou 17 (ex: 1512345678)'};
+                '+351': 'Número inválido. Deve ter 9 dígitos e começar com 9',
+                '+33': 'Número inválido. Deve ter 9 dígitos e começar com 6 ou 7',
+                '+44': 'Número inválido. Deve ter 10 dígitos e começar com 7',
+                '+34': 'Número inválido. Deve ter 9 dígitos e começar com 6 ou 7',
+                '+49': 'Número inválido. Deve ter 10 dígitos e começar com 15, 16 ou 17'};
                 
             return { valido: false, mensagem: mensagens[indicativo] };
         }
