@@ -585,11 +585,11 @@ function listaPaises() {
         { flag: "🇹🇻", name: "Tuvalu" }, { flag: "🇺🇬", name: "Uganda" }, { flag: "🇺🇦", name: "Ukraine" },
         { flag: "🇦🇪", name: "United Arab Emirates" }, { flag: "🇬🇧", name: "United Kingdom of Great Britain and Northern Ireland" },
         { flag: "🇺🇸", name: "United States of America" }, { flag: "🇺🇲", name: "United States Minor Outlying Islands" },
-        { flag: "🇺🇾", name: "Uruguay" }, { flag: "🇺🇿", name: "Uzbekistan" }, { flag: "678", name: "Vanuatu" },
+        { flag: "🇺🇾", name: "Uruguay" }, { flag: "🇺🇿", name: "Uzbekistan" }, { flag: "🇻🇺", name: "Vanuatu" },
         { flag: "🇻🇪", name: "Venezuela (Bolivarian Republic of)" }, { flag: "🇻🇳", name: "Viet Nam" },
         { flag: "🇻🇬", name: "Virgin Islands (British)" }, { flag: "🇻🇮", name: "Virgin Islands (U.S.)" },
         { flag: "🇼🇫", name: "Wallis and Futuna" }, { flag: "🇪🇭", name: "Western Sahara" }, { flag: "🇾🇪", name: "Yemen" },
-        { flag: "🇿🇲", name: "Zambia" }, { flag: "🇿🇿", name: "Zimbabwe" }
+        { flag: "🇿🇲", name: "Zambia" }, { flag: "🇿🇼", name: "Zimbabwe" }
     ];
 
     listaPaisesSimples.forEach(country => {
@@ -611,12 +611,24 @@ function expandirInvestigacao() {
         const textoExtra = link.closest('.grid-box-investigacao').querySelector('.texto-extra');
 
         link.addEventListener('click', function () {
-            if (textoExtra.style.display === 'none') {
+            if (window.getComputedStyle(textoExtra).display === 'none') {
                 textoExtra.style.display = 'block';
                 link.textContent = 'Mostrar menos';
             } else {
                 textoExtra.style.display = 'none';
                 link.textContent = 'Saiba mais';
+            }
+        });
+
+        link.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                if (window.getComputedStyle(textoExtra).display === 'none') {
+                    textoExtra.style.display = 'block';
+                    link.textContent = 'Mostrar menos';
+                } else {
+                    textoExtra.style.display = 'none';
+                    link.textContent = 'Saiba mais';
+                }
             }
         });
     });
@@ -631,11 +643,11 @@ function expandirInvestigacao() {
 function configurarMensagensPredefinidas() {
     const mensagens = {
         "default": "",
-        "opt1": "Solicito informações sobre o Centro Académico Clínico dos Açores, nomeadamente sobre os projetos em curso na área de investigação ",
+        "opt1": "Solicito informações sobre o Centro Académico Clínico dos Açores, nomeadamente sobre os projetos em curso na área de investigação [descrição].",
         "opt2": "Venho apresentar uma proposta de parceria/colaboração com o Centro Académico Clínico dos Açores. Estou disponível para uma reunião. ",
-        "opt3": "Venho manifestar interesse no recrutamento para ",
-        "opt4": "Manifesto interesse em participar no evento/seminário ",
-        "opt5": "Apresento a seguinte sugestão/reclamação: ",
+        "opt3": "Venho manifestar interesse no recrutamento para [descrição].",
+        "opt4": "Manifesto interesse em participar no evento/seminário [descrição].",
+        "opt5": "Apresento a seguinte sugestão/reclamação: [descrição].",
         "opt6": ""
     };
 
