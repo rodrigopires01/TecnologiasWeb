@@ -16,6 +16,13 @@ function eEmailValido(email) {
  * @returns {Object} - Objeto contendo o booleano 'valido' e a mensagem de erro.
  */
 function validarTelemovelPorPais(telemovel, indicativo) {
+    
+    const apenasNumeros = /^\d+$/.test(telemovel);
+    
+    if (!apenasNumeros) {
+        return {valido: false, mensagem: 'Insira apenas números (sem espaços, letras ou caracteres especiais)!'};
+    }
+    
     const validacoes = {
         '+351': /^9[1236][0-9]{7}$/,  // Portugal   - 9 dígitos
         '+33': /^[67][0-9]{8}$/,      // França     - 9 dígitos
