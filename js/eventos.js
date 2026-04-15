@@ -35,7 +35,7 @@ async function carregarListaEventos() {
                 <div class="evento-info">
                     <p><strong> Data:</strong> ${dataFormatada}</p>
                     <p><strong> Hora:</strong> ${evento.hora}</p>
-                    <p><strong> Local:</strong> ${evento.local}</p>
+                    <p><strong> Local:</strong> ${evento.cidade}, ${evento.local}</p>
                     <p><strong> Descrição:</strong> ${evento.descricao}</p>
                 </div>
             </div>
@@ -70,6 +70,7 @@ function configurarEventListenersFormulario() {
             descricao: document.getElementById('evento-descricao').value.trim(),
             data: document.getElementById('evento-data').value,
             hora: document.getElementById('evento-hora').value,
+            cidade: document.getElementById('evento-cidade').value.trim(),
             local: document.getElementById('evento-local').value.trim()
         };
 
@@ -78,6 +79,7 @@ function configurarEventListenersFormulario() {
                 // Modo edição
                 dados.id = eventoEmEdicao;
                 await db.atualizarEvento(dados);
+                document.getElementById('btn-submit-evento').textContent = 'Adicionar Evento';
                 //mostrarToast("Evento atualizado com sucesso!", "success");
                 eventoEmEdicao = null;
                 document.getElementById('titulo-formulario').textContent = "Adicionar Novo Evento";
@@ -93,7 +95,7 @@ function configurarEventListenersFormulario() {
 
         } catch (erro) {
             console.error("Erro ao salvar evento:", erro);
-            mostrarToast("Erro ao salvar evento", "error");
+            //mostrarToast("Erro ao salvar evento", "error");
         }
     });
 
@@ -148,6 +150,7 @@ async function carregarEventoParaEdicao(id) {
         document.getElementById('evento-descricao').value = evento.descricao;
         document.getElementById('evento-data').value = evento.data;
         document.getElementById('evento-hora').value = evento.hora;
+        document.getElementById('evento-cidade').value = evento.cidade;
         document.getElementById('evento-local').value = evento.local;
 
         eventoEmEdicao = id;
@@ -177,32 +180,13 @@ function validarFormularioEventos() {
     const descricao = document.getElementById('evento-descricao').value.trim();
     const data = document.getElementById('evento-data').value;
     const hora = document.getElementById('evento-hora').value;
+    const cidade = document.getElementById('evento-cidade').value.trim();
     const local = document.getElementById('evento-local').value.trim();
 
-    if (!titulo) {
-        document.getElementById('erro-evento-titulo').textContent = 'Título é obrigatório';
+    if (!titulo || !descricao || !cidade || !local || !data || !hora) {
+        document.getElementById('erro-evento').textContent = 'Todos os campos são obrigatórios';
         valido = false;
-    }
-
-    if (!descricao) {
-        document.getElementById('erro-evento-descricao').textContent = 'Descrição é obrigatória';
-        valido = false;
-    }
-
-    if (!data) {
-        document.getElementById('erro-evento-data').textContent = 'Data é obrigatória';
-        valido = false;
-    }
-
-    if (!hora) {
-        document.getElementById('erro-evento-hora').textContent = 'Hora é obrigatória';
-        valido = false;
-    }
-
-    if (!local) {
-        document.getElementById('erro-evento-local').textContent = 'Local é obrigatório';
-        valido = false;
-    }
+    };
 
     return valido;
 }
