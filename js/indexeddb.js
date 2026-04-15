@@ -80,6 +80,7 @@ class DatabaseCACA {
                 descricao: evento.descricao,
                 data: evento.data,
                 hora: evento.hora,
+                cidade: evento.cidade,
                 local: evento.local,
                 dataCriacao: new Date().toISOString()
             });
@@ -111,6 +112,7 @@ class DatabaseCACA {
                 const eventos = request.result.sort((a, b) => 
                     new Date(a.data) - new Date(b.data)
                 );
+                console.log("Eventos obtidos:", eventos);
                 resolve(eventos);
             };
 
@@ -151,7 +153,12 @@ class DatabaseCACA {
     async atualizarEvento(evento) {
         return new Promise((resolve, reject) => {
             const transaction = this.db.transaction(["eventos"], "readwrite");
-            const eventoStore = transaction.objectStore("eventos");
+            const eventoStore = transaction.objectStore("eventos"); 
+
+            if (evento.cidade === "default") {
+                reject("Cidade inválida");
+                return;
+            }
 
             const request = eventoStore.put({
                 id: evento.id,
@@ -159,6 +166,7 @@ class DatabaseCACA {
                 descricao: evento.descricao,
                 data: evento.data,
                 hora: evento.hora,
+                cidade: evento.cidade,
                 local: evento.local,
                 dataAtualizacao: new Date().toISOString()
             });

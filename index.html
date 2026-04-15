@@ -270,60 +270,65 @@
                 
                 <form id="formulario-eventos" aria-label="Formulário para adicionar ou editar eventos">
                     <div class="form-group">
-                        <label for="evento-titulo">Título do Evento *</label>
+                        <label for="evento-titulo">Título do Evento</label>
                         <input 
                             type="text" 
                             id="evento-titulo" 
-                            placeholder="Seminário de Saúde Mental*"
+                            placeholder="Seminário de Saúde Mental"
                             required
                             aria-label="Título do evento"
                         >
-                        <div class="erro-validacao" id="erro-evento-titulo"></div>
                     </div>
 
                     <div class="form-group">
-                        <label for="evento-descricao">Descrição *</label>
+                        <label for="evento-descricao">Descrição</label>
                         <input type="text" 
                             id="evento-descricao" 
                             placeholder="Descreva o evento..."
                             required
                             aria-label="Descrição do evento"
                         ></input>
-                        <div class="erro-validacao" id="erro-evento-descricao"></div>
                     </div>
 
                     <div class="form-group">
-                        <label for="evento-data">Data do Evento *</label>
+                        <label for="evento-data">Data do Evento</label>
                         <input 
                             type="date" 
                             id="evento-data" 
                             required
                             aria-label="Data do evento"
                         >
-                        <div class="erro-validacao" id="erro-evento-data"></div>
                     </div>
 
                     <div class="form-group">
-                        <label for="evento-hora">Hora do Evento *</label>
+                        <label for="evento-hora">Hora do Evento</label>
                         <input 
                             type="time" 
                             id="evento-hora" 
                             required
                             aria-label="Hora do evento"
                         >
-                        <div class="erro-validacao" id="erro-evento-hora"></div>
                     </div>
 
+					<div class="form-group">
+						<label for="local-evento">Local do Evento</label>
+						<select class="local-evento" id="evento-cidade" aria-label="Local do evento">
+								<option value="default">Selecione um local</option>
+								<option value="Ponta Delgada">Ponta Delgada</option>
+								<option value="Angra do Heroísmo">Angra do Heroísmo</option>
+								<option value="Horta">Horta</option>
+						</select>
+					</div>
+
                     <div class="form-group">
-                        <label for="evento-local">Local do Evento *</label>
                         <input 
                             type="text" 
                             id="evento-local" 
-                            placeholder="Ex: Auditório Principal"
+                            placeholder="Auditório Principal"
                             required
                             aria-label="Local do evento"
                         >
-                        <div class="erro-validacao" id="erro-evento-local"></div>
+                        <div class="erro-validacao" id="erro-evento"></div>
                     </div>
 
                     <div class="form-buttons">
