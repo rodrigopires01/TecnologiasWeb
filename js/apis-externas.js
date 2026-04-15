@@ -1,0 +1,1 @@
+/* Aqui seria o código para a implementação de APIs externas, como a API de Clima, API de Mapas, etc. Por agora poderia fazer-se apenas a do clima */

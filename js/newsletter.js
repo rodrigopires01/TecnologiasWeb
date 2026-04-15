@@ -1,0 +1,1 @@
+/* Aqui seria o código para a newsletter, que seria semelhante ao código de eventos, mas adaptado para os subscritores da newsletter. */
