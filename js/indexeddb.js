@@ -49,7 +49,7 @@ class DatabaseCACA {
         }
     }
 
-    // --- MÉTODOS DE EVENTOS ---
+    // Método de eventos
     async obterTodosEventos() {
         return new Promise((resolve, reject) => {
             const transaction = this.db.transaction(["eventos"], "readonly");
@@ -91,7 +91,7 @@ class DatabaseCACA {
         });
     }
 
-    // --- MÉTODOS DA NEWSLETTER ---
+    // Método da newsletter
     async verificarEmailExiste(email) {
         return new Promise((resolve, reject) => {
             const transaction = this.db.transaction(["newsletter"], "readonly");
