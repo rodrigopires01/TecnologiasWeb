@@ -14,6 +14,9 @@
 	<script type="module" src="js/javascript.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 	<script src="https://d3js.org/d3.v7.min.js"></script>
+	<script src="js/indexeddb.js"></script>
+	<script src="js/apis-externas.js"></script>	
+	<script src="js/eventos.js"></script>
 </head>
 
 <body>
@@ -35,6 +38,7 @@
 				<a href="#apresentacao">Apresentação</a>
 				<a href="#noticias">Notícias</a>
 				<a href="#investigacao">Investigação</a>
+				<a href="#eventos">Eventos</a>
 				<a href="#parceiros">Parceiros</a>
 				<a href="#oportunidades">Oportunidades</a>
 				<a href="#contactos">Contactos</a>
@@ -42,6 +46,8 @@
 		</header>
 
 		<main>
+			<div>
+			</div>
 			<button id="toTop" class="to-top" aria-label="Voltar ao topo da página" hidden>↑</button>
 
 			<section id="apresentacao" class="apresentacao" tabindex="0">
@@ -252,6 +258,89 @@
 					</div>
 				</div>
 			</section>
+
+			<hr class="linebreak">
+
+			<section id="eventos" class="eventos" tabindex="0">
+        <h1>Gestão de Eventos</h1>
+        
+        <div class="eventos-container">
+            <div class="eventos-formulario">
+                <h2 id="titulo-formulario">Adicionar Novo Evento</h2>
+                
+                <form id="formulario-eventos" aria-label="Formulário para adicionar ou editar eventos">
+                    <div class="form-group">
+                        <label for="evento-titulo">Título do Evento *</label>
+                        <input 
+                            type="text" 
+                            id="evento-titulo" 
+                            placeholder="Seminário de Saúde Mental*"
+                            required
+                            aria-label="Título do evento"
+                        >
+                        <div class="erro-validacao" id="erro-evento-titulo"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="evento-descricao">Descrição *</label>
+                        <input type="text" 
+                            id="evento-descricao" 
+                            placeholder="Descreva o evento..."
+                            required
+                            aria-label="Descrição do evento"
+                        ></input>
+                        <div class="erro-validacao" id="erro-evento-descricao"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="evento-data">Data do Evento *</label>
+                        <input 
+                            type="date" 
+                            id="evento-data" 
+                            required
+                            aria-label="Data do evento"
+                        >
+                        <div class="erro-validacao" id="erro-evento-data"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="evento-hora">Hora do Evento *</label>
+                        <input 
+                            type="time" 
+                            id="evento-hora" 
+                            required
+                            aria-label="Hora do evento"
+                        >
+                        <div class="erro-validacao" id="erro-evento-hora"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="evento-local">Local do Evento *</label>
+                        <input 
+                            type="text" 
+                            id="evento-local" 
+                            placeholder="Ex: Auditório Principal"
+                            required
+                            aria-label="Local do evento"
+                        >
+                        <div class="erro-validacao" id="erro-evento-local"></div>
+                    </div>
+
+                    <div class="form-buttons">
+                        <button type="submit" id="btn-submit-evento" class="btn-submit">Adicionar Evento</button>
+                        <button type="reset" id="btn-cancelar-evento" class="btn-cancelar" style="display:none;">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="eventos-lista">
+                <h2>Eventos Registados</h2>
+                <div id="lista-eventos" aria-label="Lista de eventos">
+                    <p class="sem-eventos">Nenhum evento registado ainda.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
 			<hr class="linebreak">
 
