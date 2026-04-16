@@ -69,7 +69,7 @@ async function obterCoordenadas(cidade) {
     const url = `https://nominatim.openstreetmap.org/search?format=json&q=${(cidade)}`;
     const response = await fetch(url);
     const data = await response.json();
-    console.log(data)
+
     if (data && data.length > 0) {
         let resultado = null;
             for (const item of data) {
