@@ -1,33 +1,83 @@
-# Centro Académico Clínico dos Açores (CACA) – Website Institucional
+# Centro Académico Clínico dos Açores (CACA) - Landing Page
+
+Esta é a landing page institucional para o **Centro Académico Clínico dos Açores (CACA)**, desenvolvida como projeto prático para a unidade curricular de Tecnologias Web. A plataforma serve como um hub de informação sobre investigação, produção académica e eventos na área da saúde na Região Autónoma dos Açores.
 
 ## Descrição do Projeto
+A aplicação é uma landing page dinâmica e responsiva que combina uma interface institucional com funcionalidades avançadas de gestão de dados no cliente e integrações externas.
 
-Este projeto consiste no desenvolvimento de um website institucional para o **Centro Académico Clínico dos Açores (CACA)**, uma unidade de cooperação entre instituições de ensino superior, unidades de saúde e centros de investigação da Região Autónoma dos Açores.
+**Principais Funcionalidades:**
+* **Gestão de Eventos:** Sistema completo de CRUD (Criar, Ler, Atualizar, Eliminar) para eventos locais.
+* **Visualização de Dados:** Gráfico de barras empilhadas interativo (D3.js) que apresenta a produção académica.
+* **Experiência Visual:** Animação 3D de uma hélice de DNA (Three.js) e efeitos de transformação nos parceiros.
+* **Interatividade:** Carrossel de notícias, sistema de "Saiba mais" expansível e meteorologia dinâmica.
+* **Validações Robustas:** Formulários de contacto e newsletter com validação via Regex e feedback visual em tempo real.
 
-O site tem como objetivo divulgar a atividade do CACA, incluindo áreas de investigação (Epidemiologia, Telemedicina, Saúde Mental), notícias, eventos, parceiros, oportunidades de recrutamento e um formulário de contacto. Inclui ainda funcionalidades interativas como:
-
-- **Carrossel de notícias** com navegação por setas, indicadores, teclado e toque (mobile).
-- **Gestão de eventos** (CRUD completo) com persistência local em IndexedDB.
-- **Previsão meteorológica** para cada evento, obtida da OpenWeatherMap.
-- **Mapa interativo** (Leaflet) com localização da cidade do evento via geocoding (Nominatim).
-- **Gráfico de produção académica** (D3.js) com dados empilhados.
-- **Animação 3D de uma molécula de ADN** (Three.js) na secção da newsletter.
-- **Validação de formulários** (newsletter e contactos) com feedback visual.
-- **Design responsivo** e acessível (teclado, leitores de ecrã).
-
-## Tecnologias Utilizadas
-
-- HTML5, CSS3, JavaScript (ES6+)
-- [IndexedDB](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API) – armazenamento local
-- [Leaflet](https://leafletjs.com/) + [OpenStreetMap](https://www.openstreetmap.org/) – mapas
-- [OpenWeatherMap API](https://openweathermap.org/forecast5) – previsão meteorológica
-- [Nominatim (OSM)](https://nominatim.org/) – geocodificação
-- [Three.js](https://threejs.org/) – modelo 3D do ADN
-- [D3.js](https://d3js.org/) – gráfico de barras empilhadas
+---
 
 ## Configuração e Execução Local
 
-### Pré‑requisitos
+Devido à utilização de **Módulos JavaScript (ES6)** e à integração com a **IndexedDB**, o navegador bloqueia o acesso direto ao ficheiro `index.html` (erro de CORS) se este for aberto apenas com um clique duplo. É necessário utilizar um servidor local.
 
-- Navegador moderno (Chrome, Firefox, Edge) com suporte a ES6, IndexedDB e WebGL.
-- Servidor web local (por exemplo, [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) para VS Code, ou `python -m http.server`).
+### Passos para executar:
+1.  Certifica-te de que tens o **Python** instalado no teu computador.
+2.  Abre o terminal ou linha de comandos na pasta raiz do projeto.
+3.  Executa o seguinte comando:
+    ```bash
+    python3 -m http.server 8000
+    ```
+4.  Abre o browser e acede a: `http://localhost:8000`
+
+---
+
+## Arquitetura de Dados (IndexedDB)
+
+A aplicação utiliza a API **IndexedDB** para armazenamento persistente de dados no lado do cliente, permitindo que os eventos criados pelo utilizador sejam mantidos mesmo após fechar o navegador.
+
+* **Base de Dados:** `CACA_DB` (versão 1).
+* **Object Store:** `eventos`.
+* **Chave Primária:** `id` (auto-incremento).
+* **Índices:** Indexação pelo campo `data` para ordenação cronológica.
+* **Estrutura do Objeto:**
+    ```json
+    {
+      "id": Number,
+      "titulo": String,
+      "descricao": String,
+      "data": DateString,
+      "hora": String,
+      "cidade": String,
+      "local": String,
+      "dataAtualizacao": ISOString
+    }
+    ```
+
+---
+
+## APIs Externas e Integração
+
+A aplicação integra serviços externos para enriquecer a informação disponível na secção de eventos:
+
+1.  **OpenWeatherMap API:** Obtém previsões meteorológicas em tempo real.
+    * **Integração:** Ao visualizar um evento, o sistema consulta a previsão de 5 dias (intervalos de 3h) e apresenta o ícone e a temperatura correspondente à data e hora do evento.
+2.  **Nominatim (OpenStreetMap):**
+    * **Uso:** Geocodificação nominativa.
+    * **Integração:** Converte o nome da cidade introduzido no formulário de eventos em coordenadas geográficas (latitude e longitude).
+3.  **Leaflet.js:**
+    * **Uso:** Renderização de mapas interativos.
+    * **Integração:** Utiliza as coordenadas obtidas para desenhar um mapa dinâmico com um marcador no local exato do evento.
+
+---
+
+## Tecnologias Utilizadas
+* **Frontend:** HTML5 Semântico, CSS3 (Grid e Flexbox), JavaScript (ES6).
+* **Gráficos:** [D3.js](https://d3js.org/).
+* **3D:** [Three.js](https://threejs.org/).
+* **Mapas:** [Leaflet](https://leafletjs.com/).
+* **Tipografia:** Poppins e Source Sans 3 (Google Fonts).
+
+---
+
+## Equipa (Grupo 12)
+* Hugo Raposo
+* Rafael Dias
+* Rodrigo Pires
