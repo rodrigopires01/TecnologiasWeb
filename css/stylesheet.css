@@ -265,7 +265,7 @@ main {
 
 .newsletter-formulario h3 {
     text-align: center;
-    margin-bottom: 0px;
+    margin-bottom: 30px;
 }
 
 #dna-container {
@@ -350,6 +350,320 @@ main {
     text-align: justify;
     margin-top: 15px;
     display: none;
+}
+
+/* ===== SECÇÃO DE EVENTOS ===== */
+
+.eventos {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    text-align: center;
+    scroll-margin-top: 133px;
+}
+
+.eventos h1 {
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    color: #0f9d58;
+}
+
+.eventos-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Formulário de Eventos */
+.eventos-formulario {
+    background: #f9f9f9;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.eventos-formulario h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-family: inherit;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #0f9d58;
+    box-shadow: 0 0 5px rgba(15, 157, 88, 0.2);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.local-evento {
+    width:100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-family: inherit;
+    font-size: 1rem;
+    background-color: white;
+    margin-bottom: 10px;
+}
+
+.erro-validacao {
+    color: #dc3545;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-top: 15px;
+    display: none;
+}
+
+.erro-validacao:not(:empty) {
+    display: block;
+}
+
+.form-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 30px;
+}
+
+.btn-submit,
+.btn-cancelar {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-submit {
+    background-color: #0f9d58;
+    color: white;
+}
+
+.btn-submit:hover {
+    background-color: #0d7d47;
+}
+
+.btn-cancelar {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-cancelar:hover {
+    background-color: #c82333;
+}
+
+/* Lista de Eventos */
+.eventos-lista {
+    display: flex;
+    flex-direction: column;
+}
+
+.eventos-lista h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+#lista-eventos {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.sem-eventos {
+    text-align: center;
+    color: #999;
+    padding: 40px 20px;
+    background: #f0f0f0;
+    border-radius: 5px;
+}
+
+.evento-card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s, transform 0.3s;
+}
+
+.evento-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+.evento-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 15px;
+}
+
+.weather-card {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    max-width: 450px;
+    margin: 35px auto;
+    font-family: 'Poppins', sans-serif;
+    border: 1px solid #e2e8f0;
+}
+
+
+.weather-titulo {
+    background-color: #1a73e8;
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.weather-sumario {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 23px;
+    font-weight: 700;
+    text-transform: capitalize;
+}
+
+.weather-sumario img {
+    width: 55px;
+    height: 55px;
+}
+
+.weather-temp {
+    font-size: 20px;
+    font-weight: 700;
+    align-items: baseline;
+}
+
+.weather-body {
+    padding: 15px;
+}
+
+.weather-details-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.weather-detail-item {
+    background: #f8fafc;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #f1f5f9;
+    display: flex;
+    flex-direction: column;
+}
+
+.detail-label {
+    font-size: 0.7rem;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+}
+
+.detail-value {
+    font-weight: 600;
+    color: #1e293b;
+    font-size: 0.9rem;
+}
+
+.evento-header h3 {
+    margin: 0;
+    color: #333;
+    font-size: 1.2rem;
+}
+
+.evento-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-editar,
+.btn-remover {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    background-color: #e8e8e8;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s;
+}
+
+.btn-editar:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-remover:hover {
+    background-color: #dc3545;
+    color: white;
+}
+
+
+.event-details-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding: 15px;
+}
+
+.event-detail-item {
+    background: #ffffff;
+    padding: 12px 15px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border: 1px solid #e2e8f0;
+    transition: all 0.2s ease;
+}
+
+.event-detail-item .detail-label {
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 4px;
+    letter-spacing: 0.5px;
+}
+
+.event-detail-item .detail-value {
+    font-weight: 600;
+    font-size: 15px;
+    word-break: break-word;
 }
 
 
@@ -1027,6 +1341,18 @@ footer {
 
     table {
         min-width: 500px;
+    }
+
+    .eventos-container {
+        grid-template-columns: 1fr;
+    }
+
+    .evento-actions {
+        margin-top: 10px;
+    }
+
+    .form-buttons {
+        flex-direction: column;
     }
 
     .hamburger {

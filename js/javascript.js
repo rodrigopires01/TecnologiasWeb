@@ -24,6 +24,11 @@ document.addEventListener('DOMContentLoaded', function () {
     configurarMensagensPredefinidas();
 });
 
+document.addEventListener('DOMContentLoaded', async function () {
+    await db.iniciarBD();
+    await inicializarSecaoEventos();
+});
+
 
 /**
  * Fecha o menu hambúrguer quando uma link da navbar é clicado.
