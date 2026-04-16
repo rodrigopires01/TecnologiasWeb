@@ -529,6 +529,79 @@ main {
     margin-bottom: 15px;
 }
 
+.weather-card {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    max-width: 450px;
+    margin: 35px auto;
+    font-family: 'Poppins', sans-serif;
+    border: 1px solid #e2e8f0;
+}
+
+
+.weather-titulo {
+    background-color: #1a73e8;
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.weather-sumario {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 23px;
+    font-weight: 700;
+    text-transform: capitalize;
+}
+
+.weather-sumario img {
+    width: 55px;
+    height: 55px;
+}
+
+.weather-temp {
+    font-size: 20px;
+    font-weight: 700;
+    align-items: baseline;
+}
+
+.weather-body {
+    padding: 15px;
+}
+
+.weather-details-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.weather-detail-item {
+    background: #f8fafc;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #f1f5f9;
+    display: flex;
+    flex-direction: column;
+}
+
+.detail-label {
+    font-size: 0.7rem;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+}
+
+.detail-value {
+    font-weight: 600;
+    color: #1e293b;
+    font-size: 0.9rem;
+}
+
 .evento-header h3 {
     margin: 0;
     color: #333;
@@ -561,35 +634,36 @@ main {
     color: white;
 }
 
-.evento-info {
+
+.event-details-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding: 15px;
+}
+
+.event-detail-item {
+    background: #ffffff;
+    padding: 12px 15px;
+    border-radius: 10px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    font-size: 0.95rem;
+    align-items: flex-start;
+    border: 1px solid #e2e8f0;
+    transition: all 0.2s ease;
 }
 
-.evento-info p {
-    margin: 0;
-    color: #555;
+.event-detail-item .detail-label {
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 4px;
+    letter-spacing: 0.5px;
 }
 
-/* Responsivo */
-@media (max-width: 768px) {
-    .eventos-container {
-        grid-template-columns: 1fr;
-    }
-
-    .evento-header {
-        flex-direction: column;
-    }
-
-    .evento-actions {
-        margin-top: 10px;
-    }
-
-    .form-buttons {
-        flex-direction: column;
-    }
+.event-detail-item .detail-value {
+    font-weight: 600;
+    font-size: 15px;
+    word-break: break-word;
 }
 
 
@@ -1267,6 +1341,18 @@ footer {
 
     table {
         min-width: 500px;
+    }
+
+    .eventos-container {
+        grid-template-columns: 1fr;
+    }
+
+    .evento-actions {
+        margin-top: 10px;
+    }
+
+    .form-buttons {
+        flex-direction: column;
     }
 
     .hamburger {

@@ -22,8 +22,10 @@ async function carregarListaEventos() {
         let htmlEventos = '';
         eventos.forEach(evento => {
             const dataFormatada = new Date(evento.data).toLocaleDateString('pt-PT');
+            
+            // Adicionei mais 3 campos ao div para dps ir buscar na outra função a cidade e a data e a hora
             htmlEventos += `
-            <div class="evento-card" data-id="${evento.id}">
+            <div class="evento-card" data-id="${evento.id}" data-city="${evento.cidade}" data-date="${evento.data}" data-hour="${evento.hora}">
                 <div class="evento-header">
                     <h3>${evento.titulo}</h3>
                     <div class="evento-actions">
@@ -31,12 +33,30 @@ async function carregarListaEventos() {
                         <button class="btn-remover" data-id="${evento.id}" aria-label="Remover evento">Remover </button>
                     </div>
                 </div>
+
+                <div class="evento-weather">
+                    <span class="weather-placeholder">A carregar...</span>
+                </div>
                 
                 <div class="evento-info">
-                    <p><strong> Data:</strong> ${dataFormatada}</p>
-                    <p><strong> Hora:</strong> ${evento.hora}</p>
-                    <p><strong> Local:</strong> ${evento.cidade}, ${evento.local}</p>
-                    <p><strong> Descrição:</strong> ${evento.descricao}</p>
+                    <div class="event-details-grid">
+                        <div class="event-detail-item">
+                            <span class="detail-label">📅 Data</span>
+                            <span class="detail-value">${dataFormatada}</span>
+                        </div>
+                        <div class="event-detail-item">
+                            <span class="detail-label">⏰ Hora</span>
+                            <span class="detail-value">${evento.hora}</span>
+                        </div>
+                        <div class="event-detail-item">
+                            <span class="detail-label">📍 Auditório</span>
+                            <span class="detail-value">${evento.local}</span>
+                        </div>
+                        <div class="event-detail-item">
+                            <span class="detail-label">📝 Descrição</span>
+                            <span class="detail-value">${evento.descricao}</span>
+                        </div>
+                    </div>
                 </div>
             </div>
             `;
@@ -44,6 +64,58 @@ async function carregarListaEventos() {
 
         listaContainer.innerHTML = htmlEventos;
         configurarBotoesEventos();
+        
+        //Adicionei isto tbm q é o loop 
+        for (const card of document.querySelectorAll('.evento-card')) {
+            const city = card.dataset.city;
+            const date = card.dataset.date;
+            const hour = card.dataset.hour;
+            const weatherSpan = card.querySelector('.evento-weather .weather-placeholder');
+
+            if (!city || city === 'default' || !date || !hour) {
+                weatherSpan.textContent = 'Indisponível';
+                continue;
+            }
+
+            const forecast = await window.getForecastByCityAndDate(city, date, hour);
+            if (forecast) {
+                weatherSpan.innerHTML = `
+                    <div class="weather-card">
+                        <div class="weather-titulo">
+                            <div class="weather-sumario">
+                                <img src="https://openweathermap.org/img/wn/${forecast.icon}.png" alt="clima">
+                                ${forecast.description}
+                            </div>
+                            <div class="weather-temp">
+                                ${forecast.temp}°C (Sensação: ${forecast.feels_like}°C)
+                            </div>
+                        </div>
+                        <div class="weather-body">
+                            <div class="weather-details-grid">
+                                <div class="weather-detail-item">
+                                    <span class="detail-label">💧 Humidade</span>
+                                    <span class="detail-value">${forecast.humidity}%</span>
+                                </div>
+                                <div class="weather-detail-item">
+                                    <span class="detail-label">🌬️ Vento</span>
+                                    <span class="detail-value">${forecast.wind} m/s</span>
+                                </div>
+                                <div class="weather-detail-item">
+                                    <span class="detail-label">🌊 Nível do Mar</span>
+                                    <span class="detail-value">${forecast.sea_level} m</span>
+                                </div>
+                                <div class="weather-detail-item">
+                                    <span class="detail-label">⏲️ Pressão</span>
+                                    <span class="detail-value">${forecast.pressure} hPa</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                weatherSpan.textContent = 'Indisponível para esta data/hora';
+            }
+        }
 
     } catch (erro) {
         console.error("Erro ao carregar eventos:", erro);
