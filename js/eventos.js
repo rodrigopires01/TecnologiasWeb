@@ -23,7 +23,6 @@ async function carregarListaEventos() {
         eventos.forEach(evento => {
             const dataFormatada = new Date(evento.data).toLocaleDateString('pt-PT');
             
-            // Adicionei mais 3 campos ao div para dps ir buscar na outra função a cidade e a data e a hora
             htmlEventos += `
             <div class="evento-card" data-id="${evento.id}" data-city="${evento.cidade}" data-date="${evento.data}" data-hour="${evento.hora}">
                 <div class="evento-header">
@@ -58,6 +57,9 @@ async function carregarListaEventos() {
                         </div>
                     </div>
                 </div>
+                
+                <div id="map-${evento.id}" class="mapa-container"></div>
+                    
             </div>
             `;
         });
@@ -65,7 +67,6 @@ async function carregarListaEventos() {
         listaContainer.innerHTML = htmlEventos;
         configurarBotoesEventos();
         
-        //Adicionei isto tbm q é o loop 
         for (const card of document.querySelectorAll('.evento-card')) {
             const city = card.dataset.city;
             const date = card.dataset.date;
@@ -78,6 +79,7 @@ async function carregarListaEventos() {
             }
 
             const forecast = await window.getForecastByCityAndDate(city, date, hour);
+
             if (forecast) {
                 weatherSpan.innerHTML = `
                     <div class="weather-card">
@@ -117,6 +119,15 @@ async function carregarListaEventos() {
             }
         }
 
+
+        for (const evento of eventos) {
+            const containerId = `map-${evento.id}`;
+            const container = document.getElementById(containerId);
+            const coords = await obterCoordenadas(evento.cidade);
+            
+            renderizarMapa(containerId, coords, evento.titulo);
+        }
+        
     } catch (erro) {
         console.error("Erro ao carregar eventos:", erro);
         mostrarToast("Erro ao carregar eventos", "error");
