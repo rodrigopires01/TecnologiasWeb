@@ -1,6 +1,7 @@
 import { validarDadosNewsletter, validarDadosContacto } from '/js/validacoes.js';
 import { processarDadosGrafico, definirDimensoesEEscalas, criarSVG } from '/js/graficoD3.js'
 import { setupDNA3D, criarEstruturaDNA, iniciarAnimacaoDNA, configurarRedimensionamentoDNA } from '/js/dna.js'
+import { adicionarSubscritor, verificarEmailSubscrito } from '/js/newsletter.js';
 
 /**
  * Primeiro event listener do site
@@ -45,16 +46,16 @@ function fecharMenuHamburger() {
 
 
 /**
- * Faz a validação dos dados na secção do newsletter. Valida se o pais está selecionado e se o e-mail está num formato correto.
- * @param {None} - Esta função não recebe parâmetros.
- * @returns {void} - Esta função não retorna qualquer valor.
+ * Faz a validação dos dados na secção do newsletter. Faz a validação se o país está selecionado e se o e-mail está no formato correto.
+ * @param {None} - A função recebe parâmetros.
+ * @returns {void} - A função não retorna qualquer valor.
  */
-function validarNewsletter() {
+async function validarNewsletter() {
     const submitBtn = document.querySelector('.newsletter-formulario .enviar_newsletter');
     const emailInput = document.querySelector('.email_newsletter');
     const paisSelect = document.querySelector('.pais_selector');
 
-    submitBtn.addEventListener('click', function (event) {
+    submitBtn.addEventListener('click', async function (event) {
         event.preventDefault();
 
         const resultado = validarDadosNewsletter(emailInput.value, paisSelect.value);
@@ -75,8 +76,19 @@ function validarNewsletter() {
         if (!resultado.valido) {
             const mensagem = resultado.erros.join('<br>');
             mostrarToast(mensagem, 'error');
-
         } else {
+           
+            const existe = await verificarEmailSubscrito(emailInput.value);
+            
+            if (existe) {
+                mostrarToast('Este email já está subscrito!', 'error');
+                emailInput.style.border = '1px solid #dc3545';
+                return;
+            }
+            
+            
+            await adicionarSubscritor(emailInput.value, paisSelect.value);
+            
             mostrarToast('Subscrito com sucesso!', 'success');
             emailInput.style.border = '1px solid #0f9d58';
             emailInput.style.backgroundColor = '#f8fff8';
@@ -84,6 +96,7 @@ function validarNewsletter() {
             paisSelect.style.backgroundColor = '#f8fff8';
             emailInput.value = '';
             paisSelect.value = 'default';
+
         }
     });
 }

@@ -7,7 +7,7 @@ class DatabaseCACA {
     constructor() {
         this.db = null;
         this.dbName = "CACA_DB";
-        this.dbVersion = 1;
+        this.dbVersion = 6;
     }
 
     /**
