@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Centro Académico Clínico dos Açores</title>
+	<link rel="icon" type="images/png" href="media/icon.png">
+
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+		rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="css/stylesheet.css">
+	<script type="module" src="js/javascript.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+	<script src="https://d3js.org/d3.v7.min.js"></script>
+	<script src="js/indexeddb.js"></script>
+	<script src="js/apis-externas.js"></script>	
+	<script src="js/eventos.js"></script>
+</head>
+
+<body>
+	<div class="container">
+		<header>
+			<div class="logo">
+				<a href="#apresentacao"><img src="media/logo.png" alt="Centro Académico Clínico dos Açores"></a>
+			</div>
+
+			<input type="checkbox" id="menu-toggle" class="menu-toggle" aria-label="Abrir menu de navegação">
+
+			<label for="menu-toggle" class="hamburger">
+				<div class="hamburger-line"></div>
+				<div class="hamburger-line"></div>
+				<div class="hamburger-line"></div>
+			</label>
+
+			<nav class="navbar" aria-label="Menu principal">
+				<a href="#apresentacao">Apresentação</a>
+				<a href="#noticias">Notícias</a>
+				<a href="#investigacao">Investigação</a>
+				<a href="#eventos">Eventos</a>
+				<a href="#parceiros">Parceiros</a>
+				<a href="#oportunidades">Oportunidades</a>
+				<a href="#contactos">Contactos</a>
+			</nav>
+		</header>
+
+		<main>
+			<div>
+			</div>
+			<button id="toTop" class="to-top" aria-label="Voltar ao topo da página" hidden>↑</button>
+
+			<section id="apresentacao" class="apresentacao" tabindex="0">
+				<div class="banner">
+					<img src="media/universidade.png" alt="Vista aérea da Universidade dos Açores">
+				</div>
+
+				<div class="texto">
+					<p>
+						O <strong>Centro Académico Clínico dos Açores (CACA)</strong> é uma unidade de cooperação
+						entre instituições de ensino superior, unidades de saúde e centros de investigação.
+					</p>
+					<p>
+						O objetivo é aprofundar a investigação científica para que se conheça a realidade regional e os problemas diversos ao nível da saúde, como também apoiar a decisão política na área da saúde, contribuindo para a capacitação da área clínica.
+					</p>
+				</div>
+			</section>
+
+			<hr class="linebreak">
+
+			<section id="noticias" class="noticias" tabindex="0">
+				<h1 id="titulo-noticias">Notícias</h1>
+
+				<div class="carrossel-noticias" aria-label="Notícias em destaque">
+					<button class="carrossel-btn prev" aria-label="Notícia anterior"><</button>
+
+					<div class="carrossel-wrapper">
+						<div class="carrossel-slides">
+
+							<!-- Noticia 1 -->
+							<div class="carrossel-item active">
+								<div class="grid-titulo-data">
+									<div class="grid-titulo">
+										<h3>Seminário “Saúde mental e exercício físico”</h3>
+									</div>
+									<div class="grid-data">
+										<h3>28 de Março de 2026</h3>
+									</div>
+								</div>
+								<div class="grid-noticias">
+									<div class="grid-box-imagem">
+										<img src="media/palestrante-2.png" alt="Palestrante durante seminário sobre saúde mental">
+									</div>
+									<div class="grid-box-texto">
+										<p><strong>Programa</strong><br><br>
+											09:00 - 09:15 | Sessão de Abertura<br>
+											09:15 - 10:00 | Exercício físico como ferramenta de promoção da saúde mental<br>
+											10:00 - 10:45 | Atividade física e prevenção da ansiedade e depressão<br>
+											10:45 - 11:15 | Pausa para Café<br>
+											11:15 - 11:45 | Mesa Redonda<br>
+											Debate sobre estratégias para incentivar estilos de vida ativos<br>
+											11:45 - 12:15 | Discussão Aberta<br>
+											Perguntas do público e partilha de experiências<br>
+											12:15 - 12:30 | Sessão de Encerramento<br><br>
+											Aberto à comunidade académica e ao público geral
+										</p>
+									</div>
+								</div>
+								<p class="noticias-categoria"><strong>Saúde Mental</strong></p>
+							</div>
+
+							<!-- Noticia 2 -->
+							<div class="carrossel-item">
+								<div class="grid-titulo-data">
+									<div class="grid-titulo">
+										<h3>Formação “Melhorias a Linha de Saúde Açores”</h3>
+									</div>
+									<div class="grid-data">
+										<h3>15 de Fevereiro de 2026</h3>
+									</div>
+								</div>
+								<div class="grid-noticias">
+									<div class="grid-box-imagem">
+										<img src="media/palestra-2.png" alt="Profissionais durante formação em telemedicina">
+									</div>
+									<div class="grid-box-texto">
+										<p>
+											Profissionais da área da saúde participaram recentemente numa <strong>ação de
+											formação dedicada à melhoria do funcionamento da Linha de Saúde Açores</strong>, com
+											o objetivo de reforçar a qualidade do atendimento, otimizar os processos de
+											triagem e garantir uma resposta mais eficaz às necessidades da população.<br><br>
+											A iniciativa reuniu médicos, enfermeiros e técnicos de atendimento,
+											abordando temas como comunicação clínica à distância, utilização de
+											protocolos de triagem e gestão segura da informação clínica. Durante a
+											sessão foram também apresentados exemplos de <strong>boas práticas no acompanhamento
+											remoto de utentes</strong>.<br><br>
+											O evento contou ainda com a colaboração de investigadores associados ao
+											Centro Académico Clínico dos Açores (CACA), que apresentaram o <strong>trabalho
+											desenvolvido na área da telemedicina.</strong>
+										</p>
+									</div>
+								</div>
+								<p class="noticias-categoria"><strong>Telemedicina</strong></p>
+							</div>
+
+							<!-- Noticia 3 -->
+							<div class="carrossel-item">
+								<div class="grid-titulo-data">
+									<div class="grid-titulo">
+										<h3>Participação no “International Epidemiology Conference”</h3>
+									</div>
+									<div class="grid-data">
+										<h3>8 de Janeiro de 2026</h3>
+									</div>
+								</div>
+								<div class="grid-noticias">
+									<div class="grid-box-imagem">
+										<img src="media/Poster-2.png" alt="Investigadora apresenta poster sobre Doença de Machado-Joseph">
+									</div>
+									<div class="grid-box-texto">
+										<p>
+											A investigadora Joana Cabral, associada ao Centro Académico Clínico dos Açores (CACA),
+											participou recentemente num congresso internacional dedicado às doenças
+											neurológicas raras, onde apresentou <strong>novos dados sobre a epidemiologia da
+											Doença de Machado-Joseph no arquipélago.</strong><br><br>
+											Durante a apresentação foram discutidas estatísticas recentes que <strong>confirmam
+											os Açores como uma das regiões do mundo com maior prevalência desta doença
+											genética</strong>, estimada em cerca de 39 casos por 100 mil habitantes.<br><br>
+											A participação no congresso permitiu divulgar o <strong>trabalho desenvolvido no
+											âmbito da área de epidemiologia do CACA</strong>.
+										</p>
+									</div>
+								</div>
+								<p class="noticias-categoria"><strong>Epidemiologia</strong></p>
+							</div>
+						</div>
+					</div>
+
+					<button class="carrossel-btn next" aria-label="Notícia seguinte">></button>
+					
+					<!-- Indicadores -->
+					<div class="carrossel-indicadores" role="group" aria-label="Indicadores do carrossel">
+						<span class="indicador active" data-slide="0" tabindex="0" role="button" aria-label="Ir para notícia 1"></span>
+						<span class="indicador" data-slide="1" tabindex="0" role="button" aria-label="Ir para notícia 2"></span>
+						<span class="indicador" data-slide="2" tabindex="0" role="button" aria-label="Ir para notícia 3"></span>
+					</div>
+				</div>
+			
+				<div class="newsletter-container">
+					<div class="newsletter-logotipo3d">
+						<div id="dna-container"></div>
+					</div>
+					<div class="newsletter-formulario">
+						<h3>Subscreva a nossa newsletter!</h3>
+						<form aria-label="Formulário de subscrição da newsletter">
+							<input type="email" placeholder="  📧 Insira o seu e-mail aqui" class="email_newsletter" aria-label="Endereço de e-mail" required>
+
+							<select id="pais" aria-label="País de residência" class="pais_selector" required>
+								<option value="default">🏳️ Selecione o seu país</option>
+							</select>
+							<button type="submit" class="enviar_newsletter">Subscrever</button>				
+						</form>
+					</div>
+				</div>
+			</section>
+
+			<hr class="linebreak">
+
+			<section id="investigacao" class="investigacao" tabindex="0">
+				<h1 id="titulo-investigacao">Áreas de Investigação</h1>
+				
+				<div class="grid-investigacao">
+					<div class="grid-box-investigacao">
+						<h3>Epidemiologia</h3>
+						<p>A epidemiologia é a ciência que estuda a distribuição, determinantes e prevenção de doenças
+							em populações, sendo essencial para a tomada de decisões em saúde pública. Nos Açores, a doença
+							Machado-Joseph é estudada epidemiologicamente, permitindo compreender sua prevalência, risco
+							e impacto na comunidade. 
+							<a class="saiba-mais" tabindex="0" role="button" aria-label="Expandir informações sobre epidemiologia">Saiba mais</a>
+							<div class="texto-extra">A investigação nesta área procura identificar padrões de doença, fatores de risco e tendências de saúde na população açoriana. A análise de dados clínicos e demográficos permite apoiar políticas públicas, orientar programas de prevenção e melhorar a resposta dos serviços de saúde às necessidades da população. A colaboração entre investigadores, profissionais de saúde e instituições académicas permite desenvolver estudos populacionais, bases de dados regionais e metodologias de análise estatística aplicadas à saúde pública. Esta abordagem contribui para uma melhor compreensão das particularidades epidemiológicas de regiões insulares. A área de epidemiologia do CACA integra uma equipa multidisciplinar de investigadores e estudantes de pós-graduação. Atualmente estão em desenvolvimento vários projetos de investigação e estudos populacionais, que já resultaram em diversas publicações científicas e dissertações de mestrado e doutoramento dedicadas à saúde pública e às doenças genéticas na região.</div>
+						</p>
+						<p><strong>Professor Responsável: </strong>Maria Silva<br>
+							<strong>Contacto:</strong> <a href="mailto:maria.silva@uac.pt" aria-label="Enviar e-mail para Maria Silva">maria.silva@uac.pt</a>
+						</p>
+					</div>
+					<div class="grid-box-investigacao">
+						<h3>Telemedicina</h3>
+						<p>A telemedicina representa a prestação de cuidados de saúde à distância, sendo potenciada por
+							plataformas que garantem a integridade dos dados, protocolos automáticos para a triagem eficiente e
+							acesso rápido a histórico clínico. Nos Açores, a telemedicina pode permitir encaminhamentos rápidos entre
+							ilhas, gerindo os diferentes recursos e incluindo a transferência segura de informações clínicas. 
+							<a class="saiba-mais" tabindex="0" role="button" aria-label="Expandir informações sobre telemedicina">Saiba mais</a>
+							<div class="texto-extra">A investigação nesta área procura identificar padrões de doença, fatores de risco e tendências de saúde na população açoriana. A análise de dados clínicos e demográficos permite apoiar políticas públicas, orientar programas de prevenção e melhorar a resposta dos serviços de saúde às necessidades da população. A colaboração entre investigadores, profissionais de saúde e instituições académicas permite desenvolver estudos populacionais, bases de dados regionais e metodologias de análise estatística aplicadas à saúde pública. Esta abordagem contribui para uma melhor compreensão das particularidades epidemiológicas de regiões insulares. A área de epidemiologia do CACA integra uma equipa multidisciplinar de investigadores e estudantes de pós-graduação. Atualmente estão em desenvolvimento vários projetos de investigação e estudos populacionais, que já resultaram em diversas publicações científicas e dissertações de mestrado e doutoramento dedicadas à saúde pública e às doenças genéticas na região.</div>
+						</p>
+						<p><strong>Professor Responsável: </strong>Ana Campos<br>
+							<strong>Contacto:</strong> <a href="mailto:ana.campos@uac.pt" aria-label="Enviar e-mail para Ana Campos">ana.campos@uac.pt</a>
+						</p>
+					</div>
+					<div class="grid-box-investigacao">
+						<h3>Saúde Mental</h3>
+						<p>A saúde mental refere-se ao bem-estar emocional, psicológico e social de uma pessoa,
+							influenciando como pensa, sente e age no dia a dia, bem como a capacidade de lidar com o stress, relacionar-se
+							e tomar decisões. Sendo os Açores a região do país com maior taxa de obesidade e suicídios, a
+							promoção estruturada do exercício físico pode contribuir simultaneamente para a saúde física e mental. 
+							<a class="saiba-mais" tabindex="0" role="button" aria-label="Expandir informações sobre saúde mental">Saiba mais</a>
+							<div class="texto-extra">A investigação nesta área procura identificar padrões de doença, fatores de risco e tendências de saúde na população açoriana. A análise de dados clínicos e demográficos permite apoiar políticas públicas, orientar programas de prevenção e melhorar a resposta dos serviços de saúde às necessidades da população. A colaboração entre investigadores, profissionais de saúde e instituições académicas permite desenvolver estudos populacionais, bases de dados regionais e metodologias de análise estatística aplicadas à saúde pública. Esta abordagem contribui para uma melhor compreensão das particularidades epidemiológicas de regiões insulares. A área de epidemiologia do CACA integra uma equipa multidisciplinar de investigadores e estudantes de pós-graduação. Atualmente estão em desenvolvimento vários projetos de investigação e estudos populacionais, que já resultaram em diversas publicações científicas e dissertações de mestrado e doutoramento dedicadas à saúde pública e às doenças genéticas na região.</div>
+						</p>
+						<p><strong>Professor Responsável: </strong>José Rocha<br>
+							<strong>Contacto:</strong> <a href="mailto:jose.rocha@uac.pt" aria-label="Enviar e-mail para José Rocha">jose.rocha@uac.pt</a>
+						</p>
+					</div>
+				</div>
+
+				<div class="grafico-container">
+					<h3>Produção Académica e Científica</h3>
+					<div id="grafico-producao" role="img" aria-label="Gráfico de barras mostrando a produção académica por categoria">
+						<!-- grafico gerado no js -->
+					</div>
+				</div>
+			</section>
+
+			<hr class="linebreak">
+
+			<section id="eventos" class="eventos" tabindex="0">
+        <h1>Gestão de Eventos</h1>
+        
+        <div class="eventos-container">
+            <div class="eventos-formulario">
+                <h2 id="titulo-formulario">Adicionar Novo Evento</h2>
+                
+                <form id="formulario-eventos" aria-label="Formulário para adicionar ou editar eventos">
+                    <div class="form-group">
+                        <label for="evento-titulo">Título do Evento</label>
+                        <input 
+                            type="text" 
+                            id="evento-titulo" 
+                            placeholder="Seminário de Saúde Mental"
+                            required
+                            aria-label="Título do evento"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="evento-descricao">Descrição</label>
+                        <input type="text" 
+                            id="evento-descricao" 
+                            placeholder="Descreva o evento..."
+                            required
+                            aria-label="Descrição do evento"
+                        ></input>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="evento-data">Data do Evento</label>
+                        <input 
+                            type="date" 
+                            id="evento-data" 
+                            required
+                            aria-label="Data do evento"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="evento-hora">Hora do Evento</label>
+                        <input 
+                            type="time" 
+                            id="evento-hora" 
+                            required
+                            aria-label="Hora do evento"
+                        >
+                    </div>
+
+					<div class="form-group">
+						<label for="local-evento">Local do Evento</label>
+						<select class="local-evento" id="evento-cidade" aria-label="Local do evento">
+								<option value="default">Selecione um local</option>
+								<option value="Ponta Delgada">Ponta Delgada</option>
+								<option value="Angra do Heroísmo">Angra do Heroísmo</option>
+								<option value="Horta">Horta</option>
+						</select>
+					</div>
+
+                    <div class="form-group">
+                        <input 
+                            type="text" 
+                            id="evento-local" 
+                            placeholder="Auditório Principal"
+                            required
+                            aria-label="Local do evento"
+                        >
+                        <div class="erro-validacao" id="erro-evento"></div>
+                    </div>
+
+                    <div class="form-buttons">
+                        <button type="submit" id="btn-submit-evento" class="btn-submit">Adicionar Evento</button>
+                        <button type="reset" id="btn-cancelar-evento" class="btn-cancelar" style="display:none;">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="eventos-lista">
+                <h2>Eventos Registados</h2>
+                <div id="lista-eventos" aria-label="Lista de eventos">
+                    <p class="sem-eventos">Nenhum evento registado ainda.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+			<hr class="linebreak">
+
+			<section id="parceiros" class="parceiros" tabindex="0">
+				<h1 id="titulo-parceiros">Instituições Parceiras</h1>
+				<p>Instituições de ensino, investigação e saúde que colaboram no âmbito do Centro Académico Clínico dos Açores:</p>
+				
+				<div class="grid-parceiros">
+					<a href="https://uac.pt/" target="_blank" class="grid-box" aria-label="Universidade dos Açores (abre nova página)">
+						<img src="media/UAc-2.png" alt="Universidade dos Açores">
+					</a>
+					<a href="https://www.hdes.pt/" target="_blank" class="grid-box" aria-label="Hospital do Divino Espírito Santo (abre nova página)">
+						<img src="media/HDES-2.png" alt="Hospital do Divino Espírito Santo">
+					</a>
+					<a href="https://usism.azores.gov.pt/wp/" target="_blank" class="grid-box" aria-label="Unidade de Saúde da Ilha de São Miguel (abre nova página)">
+						<img src="media/USISM-2.png" alt="Unidade de Saúde da Ilha de São Miguel">
+					</a>
+					<a href="https://www.inovacores.pt/" target="_blank" class="grid-box" aria-label="Instituto de Inovação Tecnológica dos Açores (abre nova página)">
+						<img src="media/INOVA-2.png" alt="Instituto de Inovação Tecnológica dos Açores">
+					</a>
+				</div>
+			</section>
+
+			<hr class="linebreak">
+
+			<section id="oportunidades" class="oportunidades" tabindex="0">
+				<h1 id="titulo-oportunidades">Oportunidades</h1>
+				
+				<div class="oportunidades-container">
+					<div class="oportunidades-img">
+						<img src="media/oportunidades.jpg" alt="Pessoas em ambiente profissional colaborando">
+					</div>
+
+					<div class="oportunidades-content">
+						<p>Recrutamentos em curso no Centro Académico Clínico dos Açores:</p>
+						<div class="tabela-content">
+							<table class="tabela-oportunidades" id="tabela-oportunidades">
+								<thead>
+									<tr>
+										<th>Nome da Oportunidade</th>
+										<th>Área</th>
+										<th>Modalidade</th>
+										<th>Estado</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>Bolsa de Investigação Epidemiológica</td>
+										<td>Saúde Pública</td>
+										<td>Voluntariado</td>
+										<td><a href="https://www.google.com" target="_blank" class="status aberta">ABERTA</a></td>
+									</tr>
+									<tr>
+										<td>Estágio Clínico - Medicina Interna</td>
+										<td>Clínica</td>
+										<td>Bolseiro</td>
+										<td><a href="https://www.google.com" target="_blank" class="status aberta">ABERTA</a></td>
+									</tr>
+									<tr>
+										<td>Projeto de Monitorização Genética</td>
+										<td>Genética</td>
+										<td>Contrato com termo certo</td>
+										<td><span class="status fechada">FECHADA</span></td>
+									</tr>
+									<tr>
+										<td>Doutoramento em Ciências Biomédicas</td>
+										<td>Investigação</td>
+										<td>Bolseiro</td>
+										<td><a href="https://www.google.com" target="_blank" class="status aberta">ABERTA</a></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<hr class="linebreak">
+
+			<section id="contactos" class="contactos" tabindex="0">
+				<h1 id="titulo-contactos">Contactos</h1>
+				
+				<div class="contactos-container">
+					<div class="contacto-mapa">
+						<iframe src="https://www.google.com/maps?q=Universidade+dos+Açores+Ponta+Delgada&output=embed" 
+								title="Mapa da Universidade dos Açores em Ponta Delgada"
+								aria-label="Mapa mostrando a localização da Universidade dos Açores">
+						</iframe>
+					</div>
+					
+					<div class="contacto-info">
+						<h4>📍 Morada:</h4>
+						<p>Centro Académico Clínico dos Açores</p>
+						<p>Universidade dos Açores</p>
+						<p>Campus Universitário de Ponta Delgada</p>
+						<p>9500-018 Ponta Delgada</p>
+						<p>Ilha de São Miguel - Açores - Portugal</p>
+						<br><br>
+						<h4>📞 Telefone:</h4>
+						<p>(+351) 296 650 000</p>
+						<br><br>
+						<h4>📧 Email:</h4>
+						<a href="mailto:caca@uac.pt" aria-label="Enviar e-mail para caca@uac.pt">caca@uac.pt</a>
+					</div>
+					
+					<div class="contacto-form">
+						<h4>Contacte-nos:</h4>
+						<form aria-label="Formulário de contacto">
+							<input type="text" placeholder="Nome Completo" class="nome_contacto" id="nome_contacto" aria-label="Nome completo">
+							<div class="mensagem-erro" id="erro-nome" aria-label="Nome não pode estar vazio"></div>
+
+							<input type="email" placeholder="Email" class="email_contacto" id="email_contacto" aria-label="Endereço de e-mail">
+							<div class="mensagem-erro" id="erro-email" aria-label="Email não pode estar vazio"></div>
+
+							<div class="telemovel-group">
+								<select aria-label="País de residência" class="indicativo_contacto" required>
+									    <option value="+351">🇵🇹 +351</option>
+								</select>
+								<input type="tel" placeholder="Número de Telemóvel" class="telemovel_contacto" id="telemovel_contacto">
+							</div>
+							<div class="mensagem-erro" id="erro-telemovel" aria-label="Telemóvel não pode estar vazio"></div>
+
+							<select class="assunto_contacto" id="assunto_contacto" aria-label="Assunto da mensagem">
+								<option value="default">Selecione um assunto</option>
+								<option value="opt1">Pedido de informações</option>
+								<option value="opt2">Proposta de parceria/colaboração</option>
+								<option value="opt3">Informações sobre oportunidades</option>
+								<option value="opt4">Participação em eventos/seminários</option>
+								<option value="opt5">Sugestão/Reclamação</option>
+								<option value="opt6">Outro Assunto</option>
+							</select>
+							<div class="mensagem-erro" id="erro-assunto" aria-label="Assunto não pode estar vazio"></div>
+
+							<textarea placeholder="Mensagem" class="mensagem_contacto" id="mensagem_contacto" aria-label="Conteúdo da mensagem"></textarea>
+							<div class="mensagem-erro" id="erro-mensagem" aria-label="Mensagem não pode estar vazio"></div>
+							
+							<button type="submit" class="enviar">Enviar mensagem</button>
+						</form>
+					</div>
+				</div>
+			</section>
+		</main>
+
+		<footer>
+			<div class="footer_copyright">
+				<p>CACA © 2026</p>
+			</div>
+
+			<div class="footer_socialmedia">
+				<a href="https://facebook.com" target="_blank" aria-label="Facebook do CACA (abre nova página)">
+					<img src="media/fb.png" alt="">
+				</a>
+				<a href="https://instagram.com" target="_blank" aria-label="Instagram do CACA (abre nova página)">
+					<img src="media/ig.png" alt="">
+				</a>
+				<a href="https://linkedin.com" target="_blank" aria-label="LinkedIn do CACA (abre nova página)">
+					<img src="media/linkedIn.png" alt="">
+				</a>
+			</div>
+
+			<div class="footer_course">
+				<a href="https://www.uac.pt/" target="_blank" aria-label="Site da Universidade dos Açores (abre nova página)">
+					<p>Universidade dos Açores</p>
+				</a>
+				<p>Tecnologias Web - 2025/2026</p>
+			</div>
+			
+			<div class="footer_privacy">
+				<a href="https://www.google.com/" target="_blank" aria-label="Política de Privacidade (abre nova página)">
+					<p>Política de Privacidade</p>
+				</a>
+			</div>
+		</footer>
+	</div>
+</body>
+
+</html>
