@@ -1,42 +1,50 @@
-import { validarDadosNewsletter } from './validacoes.js';
-
-export function configurarNewsletter() {
-    const form = document.querySelector('.newsletter_form');
-    if (!form) return;
-
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        // Aqui pegamos no email e pais como o teu colega disse
-        const dados = {
-            email: document.querySelector('.email_newsletter').value,
-            pais: document.getElementById('pais').value,
+/**
+ * Adiciona um novo subscritor à newsletter
+ * @param {string} email - Email do subscritor
+ * @param {string} pais - País do subscritor
+ * @returns {Promise} Resolve quando adicionado
+ */
+export async function adicionarSubscritor(email, pais) {
+    return new Promise((resolve, reject) => {
+        const transaction = db.db.transaction(["subscritores"], "readwrite");
+        const store = transaction.objectStore("subscritores");
+        
+        const request = store.add({
+            email: email,
+            pais: pais,
             dataSubscricao: new Date().toISOString()
+        });
+        
+        request.onsuccess = () => {
+            console.log("Subscritor adicionado:", email);
+            resolve();
         };
+        
+        request.onerror = () => {
+            console.error("Erro ao adicionar subscritor:", request.error);
+            reject(request.error);
+        };
+    });
+}
 
-        // Validação (já feita pelos teus colegas)
-        const resultado = validarDadosNewsletter(dados);
-
-        if (resultado.valido) {
-            try {
-                // 1. Check de duplicados (o que o Rodrigo pediu)
-                const existe = await window.db.verificarEmailExiste(dados.email);
-                
-                if (existe) {
-                    alert("Email já está subscrito no newsletter");
-                    return;
-                }
-
-                // 2. Se não existe, guarda na tabela
-                await window.db.adicionarSubscritor(dados);
-                alert("Subscrição guardada com sucesso!");
-                form.reset();
-
-            } catch (erro) {
-                console.error("Erro ao processar newsletter:", erro);
-            }
-        } else {
-            alert(resultado.erros.email || "Verifique os dados.");
-        }
+/**
+ * Verifica se um email já está subscrito
+ * @param {string} email - Email a verificar
+ * @returns {Promise<boolean>} True se já existir
+ */
+export async function verificarEmailSubscrito(email) {
+    return new Promise((resolve, reject) => {
+        const transaction = db.db.transaction(["subscritores"], "readonly");
+        const store = transaction.objectStore("subscritores");
+        const request = store.get(email);
+        
+        request.onsuccess = () => {
+            resolve(request.result !== undefined);
+        };
+        
+        request.onerror = () => {
+            console.error("Erro ao verificar email:", request.error);
+            reject(request.error);
+        };
     });
 }
