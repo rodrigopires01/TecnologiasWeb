@@ -1,6 +1,7 @@
 import { validarDadosNewsletter, validarDadosContacto } from '/js/validacoes.js';
 import { processarDadosGrafico, definirDimensoesEEscalas, criarSVG } from '/js/graficoD3.js'
 import { setupDNA3D, criarEstruturaDNA, iniciarAnimacaoDNA, configurarRedimensionamentoDNA } from '/js/dna.js'
+import { adicionarSubscritor, verificarEmailSubscrito } from '/js/newsletter.js';
 
 /**
  * Primeiro event listener do site
@@ -45,16 +46,16 @@ function fecharMenuHamburger() {
 
 
 /**
- * Faz a validação dos dados na secção do newsletter. Valida se o pais está selecionado e se o e-mail está num formato correto.
- * @param {None} - Esta função não recebe parâmetros.
- * @returns {void} - Esta função não retorna qualquer valor.
+ * Faz a validação dos dados na secção do newsletter. Faz a validação se o país está selecionado e se o e-mail está no formato correto.
+ * @param {None} - A função recebe parâmetros.
+ * @returns {void} - A função não retorna qualquer valor.
  */
-function validarNewsletter() {
+async function validarNewsletter() {
     const submitBtn = document.querySelector('.newsletter-formulario .enviar_newsletter');
     const emailInput = document.querySelector('.email_newsletter');
     const paisSelect = document.querySelector('.pais_selector');
 
-    submitBtn.addEventListener('click', function (event) {
+    submitBtn.addEventListener('click', async function (event) {
         event.preventDefault();
 
         const resultado = validarDadosNewsletter(emailInput.value, paisSelect.value);
@@ -75,8 +76,19 @@ function validarNewsletter() {
         if (!resultado.valido) {
             const mensagem = resultado.erros.join('<br>');
             mostrarToast(mensagem, 'error');
-
         } else {
+           
+            const existe = await verificarEmailSubscrito(emailInput.value);
+            
+            if (existe) {
+                mostrarToast('Este email já está subscrito!', 'error');
+                emailInput.style.border = '1px solid #dc3545';
+                return;
+            }
+            
+            
+            await adicionarSubscritor(emailInput.value, paisSelect.value);
+            
             mostrarToast('Subscrito com sucesso!', 'success');
             emailInput.style.border = '1px solid #0f9d58';
             emailInput.style.backgroundColor = '#f8fff8';
@@ -84,6 +96,7 @@ function validarNewsletter() {
             paisSelect.style.backgroundColor = '#f8fff8';
             emailInput.value = '';
             paisSelect.value = 'default';
+
         }
     });
 }
@@ -122,11 +135,15 @@ function validarFormulario() {
             nome: document.getElementById('nome_contacto').value.trim(),
             email: document.getElementById('email_contacto').value.trim(),
             telemovel: document.getElementById('telemovel_contacto').value.trim(),
+            indicativo: document.querySelector('.indicativo_contacto').value.trim(),
             assunto: document.getElementById('assunto_contacto').value.trim(),
             mensagem: document.getElementById('mensagem_contacto').value.trim()
         };
 
+        limparErros();
+
         const resultado = validarDadosContacto(dados);
+        console.log(resultado);
 
         if (!resultado.valido) {
             if (resultado.erros.nome) {
@@ -148,6 +165,20 @@ function validarFormulario() {
             mostrarToast('Mensagem enviada com sucesso!', 'success');
             form.reset();
         }
+    });
+}
+
+
+function limparErros() {
+    document.querySelectorAll('.mensagem-erro').forEach(function (elemento) {
+        elemento.style.visibility = 'hidden';
+        elemento.textContent = '';
+        elemento.style.marginTop = '3.5px';
+        elemento.style.marginBottom = '3.5px';
+    });
+
+    document.querySelectorAll('.nome_contacto, .email_contacto, .assunto_contacto, .mensagem_contacto').forEach(function (campo) {
+        campo.style.border = '1px solid #ccc';
     });
 }
 
@@ -183,7 +214,7 @@ function mostrarErro(campoNome, mensagem) {
     document.getElementById(`erro-${campoNome}`).style.visibility = 'visible';
 
     if (campoNome === 'telemovel') {
-        document.getElementById(`erro-${campoNome}`).style.marginLeft = '103px';
+        document.getElementById(`erro-${campoNome}`).style.marginLeft = '107px';
     }
 }
 
@@ -572,11 +603,11 @@ function listaPaises() {
         { flag: "🇹🇻", name: "Tuvalu" }, { flag: "🇺🇬", name: "Uganda" }, { flag: "🇺🇦", name: "Ukraine" },
         { flag: "🇦🇪", name: "United Arab Emirates" }, { flag: "🇬🇧", name: "United Kingdom of Great Britain and Northern Ireland" },
         { flag: "🇺🇸", name: "United States of America" }, { flag: "🇺🇲", name: "United States Minor Outlying Islands" },
-        { flag: "🇺🇾", name: "Uruguay" }, { flag: "🇺🇿", name: "Uzbekistan" }, { flag: "678", name: "Vanuatu" },
+        { flag: "🇺🇾", name: "Uruguay" }, { flag: "🇺🇿", name: "Uzbekistan" }, { flag: "🇻🇺", name: "Vanuatu" },
         { flag: "🇻🇪", name: "Venezuela (Bolivarian Republic of)" }, { flag: "🇻🇳", name: "Viet Nam" },
         { flag: "🇻🇬", name: "Virgin Islands (British)" }, { flag: "🇻🇮", name: "Virgin Islands (U.S.)" },
         { flag: "🇼🇫", name: "Wallis and Futuna" }, { flag: "🇪🇭", name: "Western Sahara" }, { flag: "🇾🇪", name: "Yemen" },
-        { flag: "🇿🇲", name: "Zambia" }, { flag: "🇿🇿", name: "Zimbabwe" }
+        { flag: "🇿🇲", name: "Zambia" }, { flag: "🇿🇼", name: "Zimbabwe" }
     ];
 
     listaPaisesSimples.forEach(country => {
@@ -598,12 +629,24 @@ function expandirInvestigacao() {
         const textoExtra = link.closest('.grid-box-investigacao').querySelector('.texto-extra');
 
         link.addEventListener('click', function () {
-            if (textoExtra.style.display === 'none') {
+            if (window.getComputedStyle(textoExtra).display === 'none') {
                 textoExtra.style.display = 'block';
                 link.textContent = 'Mostrar menos';
             } else {
                 textoExtra.style.display = 'none';
                 link.textContent = 'Saiba mais';
+            }
+        });
+
+        link.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                if (window.getComputedStyle(textoExtra).display === 'none') {
+                    textoExtra.style.display = 'block';
+                    link.textContent = 'Mostrar menos';
+                } else {
+                    textoExtra.style.display = 'none';
+                    link.textContent = 'Saiba mais';
+                }
             }
         });
     });
@@ -618,16 +661,18 @@ function expandirInvestigacao() {
 function configurarMensagensPredefinidas() {
     const mensagens = {
         "default": "",
-        "opt1": "Solicito informações sobre o Centro Académico Clínico dos Açores, nomeadamente sobre os projetos em curso na área de investigação ",
+        "opt1": "Solicito informações sobre o Centro Académico Clínico dos Açores, nomeadamente sobre os projetos em curso na área de investigação [descrição].",
         "opt2": "Venho apresentar uma proposta de parceria/colaboração com o Centro Académico Clínico dos Açores. Estou disponível para uma reunião. ",
-        "opt3": "Venho manifestar interesse no recrutamento para ",
-        "opt4": "Manifesto interesse em participar no evento/seminário ",
-        "opt5": "Apresento a seguinte sugestão/reclamação: ",
+        "opt3": "Venho manifestar interesse no recrutamento para [descrição].",
+        "opt4": "Manifesto interesse em participar no evento/seminário [descrição].",
+        "opt5": "Apresento a seguinte sugestão/reclamação: [descrição].",
         "opt6": ""
     };
 
     document.getElementById('assunto_contacto').addEventListener('change', function () {
         document.getElementById('mensagem_contacto').value = mensagens[this.value];
+
+        document.getElementById('mensagem_contacto').dispatchEvent(new Event('input'));
     });
 }
 
